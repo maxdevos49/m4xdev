@@ -1,0 +1,17 @@
+@font-face {
+	font-family: 'bitstream_vera_sansroman';
+	src: url('../public/Vera-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+html,
+body {
+	font-family: 'bitstream_vera_sansroman';
+	padding: 0;
+	margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
