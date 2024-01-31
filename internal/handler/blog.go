@@ -5,6 +5,6 @@ import (
 	"github.com/maxdevos49/m4xdev/internal/view"
 )
 
-func Home(c *fiber.Ctx) error {
-	return Render(c, view.Home())
+func Blog(c *fiber.Ctx) error {
+	return Render(c, view.Blog())
 }

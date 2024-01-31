@@ -24,3 +24,6 @@ build
 internal/static/.dist
 bin
 .bin
+assets
+.embed
+*_templ.go

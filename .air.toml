@@ -2,14 +2,14 @@
 
 root = "."
 testdata_dir = "testdata"
-tmp_dir = ".bin"
+tmp_dir = "bin"
 
 [build]
   args_bin = []
-  bin = "./.bin/m4xdev"
-  cmd = "templ generate && go build -o ./.bin/m4xdev ./cmd/m4xdev"
+  bin = "./bin/m4xdev"
+  cmd = "make build"
   delay = 500
-  exclude_dir = ["assets", ".bin", "vendor", "testdata", "node_modules"]
+  exclude_dir = ["assets", "bin", "vendor", "testdata", "node_modules"]
   exclude_file = []
   exclude_regex = [".*_templ.go"]
   exclude_unchanged = false

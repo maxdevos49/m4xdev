@@ -8,13 +8,13 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 )
 
-//go:embed .dist/*
+//go:embed .embed/*
 var embedDirStatic embed.FS
 
 func Middleware() func(*fiber.Ctx) error {
 	return filesystem.New(filesystem.Config{
 		Root:       http.FS(embedDirStatic),
-		PathPrefix: ".dist",
+		PathPrefix: ".embed",
 		Browse:     true,
 	})
 }

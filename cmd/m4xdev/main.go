@@ -19,6 +19,7 @@ func run() error {
 	app := fiber.New()
 
 	app.Get("/", handler.Home)
+	app.Get("/blog", handler.Blog)
 
 	app.Use("/static", static.Middleware())
 

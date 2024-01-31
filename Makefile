@@ -1,19 +1,27 @@
-.PHONY:
+BINARIES=m4xdev
 
-run: build
-	./.bin/m4xdev
+CMD_DIR=cmd
+BIN_DIR=bin
+EMBED_DIR=internal/static/.embed
 
-build:
-	@npx tailwind -o internal/static/.dist/style.css -m
-	@templ generate
-	@go build -o ./.bin/m4xdev ./cmd/m4xdev
+TEMPL_SRC_FILES=$(shell find . -name "*.templ" -type f)
+TEMPL_GEN_FILES=$(patsubst %.templ, %_templ.go, $(TEMPL_SRC_FILES))
+TAILWIND_GEN_FILES=$(EMBED_DIR)/tailwind.css
 
-build-watch:
-	@air
+$(BINARIES): | $(TEMPL_GEN_FILES) $(TAILWIND_GEN_FILES) 
+	go build -o ./$(BIN_DIR)/$@ ./$(CMD_DIR)/$@
 
-static-watch:
-	@npx tailwind -o internal/static/.dist/style.css -m -w
+$(TEMPL_GEN_FILES): $(TEMPL_SRC_FILES)
+	templ generate $<
+
+$(TAILWIND_GEN_FILES): $(TEMPL_SRC_FILES) internal/static/css/tailwind-input.css
+	npx tailwind -i internal/static/css/tailwind-input.css -o $@ -m
+	touch $@
+
+.PHONY: build clean
+build: $(BINARIES)
 
 clean:
-	@rm -rf .bin internal/static/.dist
-	@find ./ -name "*_templ.go" -delete
+	rm -rf $(BIN_DIR)
+	rm -rf $(EMBED_DIR)
+	find ./ -name "*_templ.go" -delete
