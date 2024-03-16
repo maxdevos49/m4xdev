@@ -4,25 +4,28 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/helmet"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 
-	"github.com/maxdevos49/m4xdev/internal/static"
-	"github.com/maxdevos49/m4xdev/internal/handler"
+	"github.com/maxdevos49/m4xdev/handlers"
 )
 
 func main() {
-	if err := run(); err != nil {
-		log.Fatal(err)
-	}
-}
-
-func run() error {
 	app := fiber.New()
 
-	app.Get("/", handler.Home)
-	app.Get("/blog", handler.Blog)
+	app.Use(helmet.New())
+	app.Use(logger.New())
 
-	app.Use("/static", static.Middleware())
+	app.Static("/", "./wwwroot", fiber.Static{
+		Compress: true,
+	})
 
+	app.Get("/", handlers.Home)
 
-	return app.Listen(":3002")
+	// TODO 404 page
+	// TODO 500 page
+
+	if err := app.Listen(":3002"); err != nil {
+		log.Fatal(err)
+	}
 }

@@ -1,0 +1,24 @@
+package views
+
+templ Layout() {
+	<html>
+		<head>
+			<title>M4XDEV</title>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link rel="stylesheet" href="/css/blog.css"/>
+		</head>
+		<body hx-boost="true" class="bg-neutral-900 text-white m-0 font-sans text-lg">
+			<main class="flow content-grid">
+				<nav class="flex flex-col">
+					<a href="/" class="text-xl py-2 font-bold">M4XDEV</a>
+				</nav>
+				{ children... }
+				<section class="full-width p-4">
+					<span>© 2024 Maxwell DeVos</span>
+					<a href="/" class="underline">Home</a>
+				</section>
+			</main>
+		</body>
+	</html>
+}

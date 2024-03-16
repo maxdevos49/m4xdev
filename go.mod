@@ -4,6 +4,7 @@ go 1.21.5
 
 require (
 	github.com/a-h/templ v0.2.513
+	github.com/evanw/esbuild v0.20.0
 	github.com/gofiber/fiber/v2 v2.52.0
 )
 
