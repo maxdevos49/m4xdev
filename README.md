@@ -1,26 +1,49 @@
 # M4XDEV\.com
 ---
 
-### Development Dependencies
+Personal website written in Go. Goals for this site include low maintenance and ease of adding new content while being a joy to work on.
 
-##### `go install github.com/a-h/templ/cmd/templ@latest`
-- Used to generate `*_templ.go` files from `*.templ` files 
-##### `go install github.com/cosmtrek/air@latest`
-- Used for live reloading whenever a go file is changed
+## Development dependencies
 
+### [Templ](https://github.com/a-h/templ) - HTML templating language for Go
+```sh
+go install github.com/a-h/templ/cmd/templ@latest
+```
 
-### Commands
+### [Node + NPM](https://nodejs.org/en) - Used for JSDoc type validation
+```sh
+# Install node dependencies
+npm ci
+```
 
-##### `make`
-Builds and runs the application
-##### `make build`
-Builds the application
-##### `make watch`
-Builds and runs the application whenever a file changes
-##### `make clean`
-Deletes all generated folders
+## Development Tools
 
-### Stack:
-- [Fiber](https://docs.gofiber.io/)
-- [Templ](https://templ.guide/)
-- [HTMX](https://htmx.org/docs/)
+### [Air](https://github.com/cosmtrek/air) - Live reload for Go apps
+```sh
+go install github.com/cosmtrek/air@latest
+```
+
+## Build project
+```sh
+make build
+```
+
+## JSDoc type checking
+```sh
+npm run check
+```
+
+## Run project
+```sh
+./bin/m4xdev
+```
+
+## Live rebuild and run
+```sh
+air
+```
+
+## Clean project
+```sh
+make clean
+```
