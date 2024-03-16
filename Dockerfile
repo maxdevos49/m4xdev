@@ -10,7 +10,8 @@ ARG GO_VERSION=1.21.5
 FROM golang:${GO_VERSION} AS build
 WORKDIR /src
 
-RUN go install github.com/a-h/templ/cmd/templ@latest
+RUN go install github.com/a-h/templ/cmd/templ@latest  \
+    && cp $GOPATH/bin/templ /usr/local/bin/
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
