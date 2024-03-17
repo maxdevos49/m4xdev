@@ -10,8 +10,11 @@ ARG GO_VERSION=1.21.5
 FROM golang:${GO_VERSION} AS build
 WORKDIR /src
 
-RUN go install github.com/a-h/templ/cmd/templ@latest  \
-    && cp $GOPATH/bin/templ /usr/local/bin/
+# Install templ go generator
+RUN go install github.com/a-h/templ/cmd/templ@latest
+
+# Compile the *.templ files into *_templ.go
+RUN templ generate
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
@@ -21,6 +24,8 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,source=go.sum,target=go.sum \
     --mount=type=bind,source=go.mod,target=go.mod \
     go mod download -x
+
+
 
 # Build the application.
 # Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
