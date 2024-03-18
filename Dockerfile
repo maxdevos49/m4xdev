@@ -47,9 +47,9 @@ RUN adduser \
 USER m4xdev
 
 # Copy the executable from the "build" stage.
-COPY --from=build /bin/m4xdev /app/
+COPY --from=build /bin/m4xdev /bin/
 # Copy the static assets
-COPY --from=build /src/wwwroot /app/wwwroot
+COPY --from=build /src/wwwroot /wwwroot
 
 EXPOSE 3002
-ENTRYPOINT [ "/app/m4xdev" ]
+ENTRYPOINT [ "/bin/m4xdev" ]
