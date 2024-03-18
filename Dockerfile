@@ -6,34 +6,24 @@
 
 ################################################################################
 # Create a stage for building the application.
-ARG GO_VERSION=1.21.5
-FROM golang:${GO_VERSION} AS build
+FROM golang:1.21.5 AS build
 WORKDIR /src
 
-# Install templ go generator
-RUN go install github.com/a-h/templ/cmd/templ@latest
+COPY . .
 
-# Compile the *.templ files into *_templ.go
-RUN templ generate
+# Install templ -> go transpiler
+RUN --mount=type=cache,target=/go/bin \
+    go install github.com/a-h/templ/cmd/templ@latest
+# Transpile the *.templ files into *_templ.go
+RUN --mount=type=cache,target=/go/bin \
+    templ generate
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
-# Leverage bind mounts to go.sum and go.mod to avoid having to copy them into
-# the container.
+# Download GO module depenencies
 RUN --mount=type=cache,target=/go/pkg/mod/ \
-    --mount=type=bind,source=go.sum,target=go.sum \
-    --mount=type=bind,source=go.mod,target=go.mod \
     go mod download -x
-
-
-
 # Build the application.
-# Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
-# Leverage a bind mount to the current directory to avoid having to copy the
-# source code into the container.
 RUN --mount=type=cache,target=/go/pkg/mod/ \
-    --mount=type=bind,target=. \
-    CGO_ENABLED=0 go build -o /bin/server ./cmd/m4xdev
+    CGO_ENABLED=0 go build -o /bin/m4xdev ./cmd/m4xdev
 
 ################################################################################
 # Create a new stage for running the application that contains the minimal
@@ -68,13 +58,16 @@ RUN adduser \
     --no-create-home \
     --uid "${UID}" \
     m4xdev
+
 USER m4xdev
 
 # Copy the executable from the "build" stage.
-COPY --from=build /bin/server /bin/
+COPY --from=build /bin/m4xdev /app/
+# Copy the static assets
+COPY --from=build /src/wwwroot /app/wwwroot
 
 # Expose the port that the application listens on.
 EXPOSE 3002
 
 # What the container should run when it is started.
-ENTRYPOINT [ "/bin/server" ]
+ENTRYPOINT [ "/app/m4xdev" ]
