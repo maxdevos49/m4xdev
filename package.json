@@ -1,9 +1,12 @@
 {
-  "scripts": {
-    "check": "tsc --noEmit",
-    "check:watch": "tsc --noEmit --watch"
-  },
-  "devDependencies": {
-    "typescript": "^5.3.3"
-  }
+	"scripts": {
+		"check": "tsc --noEmit",
+		"check:watch": "tsc --noEmit --watch",
+		"lint": "eslint wwwroot --fix",
+		"lint:check": "eslint wwwroot"
+	},
+	"devDependencies": {
+		"eslint": "^8.57.0",
+		"typescript": "^5.3.3"
+	}
 }

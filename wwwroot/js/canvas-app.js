@@ -3,7 +3,7 @@
  * @property {number} lastUpdate
  * @property {number} now
  * @property {number} nextUpdate
- * @property {number} progress 
+ * @property {number} progress
  */
 
 /**
@@ -64,7 +64,7 @@ function canvasApp(options) {
 	let loopControls = null;
 
 	return {
-		mount(selector = "#app") {
+		mount(selector = '#app') {
 			if (appContainer) {
 				throw new Error('App is already mounted. Unmount before mounting again.');
 			}
@@ -79,7 +79,7 @@ function canvasApp(options) {
 
 			loopControls = createLoopControls(options, ctx);
 
-			return loopControls
+			return loopControls;
 		},
 		unmount() {
 			if (!appContainer) {
@@ -96,7 +96,7 @@ function canvasApp(options) {
 			appContainer = null;
 			loopControls = null;
 		}
-	}
+	};
 }
 
 /**
@@ -120,7 +120,7 @@ function createLoopControls(options, ctx) {
 	options?.setup?.(ctx);
 
 	/**
-	 * @param {DOMHighResTimeStamp} now 
+	 * @param {DOMHighResTimeStamp} now
 	 */
 	const renderCallback = (now) => {
 		if (isPlaying) {
@@ -142,7 +142,7 @@ function createLoopControls(options, ctx) {
 			now: now - previousFrameTime,
 			nextUpdate: previousUpdateTime + updateInterval,
 			progress: now / (previousUpdateTime + updateInterval)
-		}
+		};
 
 		const elapsedFrameTime = now - previousFrameTime;
 		if (!options.frameRate) {
@@ -152,7 +152,7 @@ function createLoopControls(options, ctx) {
 			previousFrameTime = now - (elapsedFrameTime % frameInterval);
 			options.render(ctx, renderTime);
 		}
-	}
+	};
 
 	return {
 		play() {
@@ -174,9 +174,9 @@ function createLoopControls(options, ctx) {
 			isPlaying = false;
 			renderCallback(performance.now());
 		}
-	}
+	};
 }
 
 export {
 	canvasApp
-}
+};

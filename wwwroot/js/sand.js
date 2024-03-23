@@ -64,12 +64,12 @@ const render = (ctx) => {
 			const goLeft = () => {
 				sand[leftIndex] = sand[index];
 				sand[index] = 0;
-			}
+			};
 
 			const goRight = () => {
 				sand[rightIndex] = sand[index];
 				sand[index] = 0;
-			}
+			};
 
 			if (canGoLeft && canGoRight) {
 				if (Math.random() > 0.5) {
@@ -89,17 +89,17 @@ const render = (ctx) => {
 		const y = Math.floor(index / gridWidth) * grainSize;
 		ctx.fillRect(x, y, grainSize, grainSize);
 	}
-}
+};
 
 const sandApp = canvasApp({
 	frameRate: 30,
 	width: width,
 	height: height,
 	render
-})
+});
 
 
 document.addEventListener('DOMContentLoaded', () => {
-	const controls = sandApp.mount("#app");
+	const controls = sandApp.mount('#app');
 	controls.play();
-})
+});
