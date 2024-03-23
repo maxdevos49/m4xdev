@@ -18,6 +18,8 @@ func main() {
 
 	app.Static("/", "./wwwroot", fiber.Static{
 		Compress: true,
+		// If a bundling step is added consider the following along with the use of utils.AssetURL
+		// MaxAge:   60 * 60 * 24 * 30, // Cache static assets for 30 days
 	})
 
 	app.Get("/", handlers.Home)

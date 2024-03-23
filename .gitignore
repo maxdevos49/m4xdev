@@ -27,3 +27,4 @@ bin
 assets
 .embed
 *_templ.go
+*.fiber.gz

@@ -6,19 +6,21 @@ templ Layout() {
 			<title>M4XDEV</title>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link rel="stylesheet" type="text/css" href="/css/blog.css"/>
+			<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+			<link rel="stylesheet" type="text/css" href="/css/reset.css"/>
+			<link rel="stylesheet" type="text/css" href="/css/utilities.css"/>
 		</head>
-		<body hx-boost="true" class="bg-neutral-900 text-white m-0 font-sans text-lg">
-			<main class="flow content-grid">
-				<nav class="flex flex-col">
-					<a href="/" class="text-xl py-2 font-bold">M4XDEV</a>
-				</nav>
+		<body>
+			<nav>
+				<a href="/">M4XDEV</a>
+			</nav>
+			<main>
 				{ children... }
-				<section class="full-width p-4">
-					<span>© 2024 Maxwell DeVos</span>
-					<a href="/" class="underline">Home</a>
-				</section>
 			</main>
+			<footer>
+				<span>© 2024 Maxwell DeVos</span>
+				<a href="/">Home</a>
+			</footer>
 		</body>
 	</html>
 }
