@@ -33,6 +33,11 @@ make build
 npm run check
 ```
 
+## JS linting
+```sh
+npm run lint
+```
+
 ## Run project
 ```sh
 ./bin/m4xdev
