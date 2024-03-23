@@ -18,3 +18,4 @@ build: $(BINARIES)
 clean:
 	rm -rf $(BIN_DIR)
 	find ./ -name "*_templ.go" -delete
+	find ./ -name "*.fiber.gz" -delete
