@@ -1,4 +1,4 @@
-import {canvasApp} from './canvas-app.js';
+import {canvasApp} from "./canvas-app.js";
 
 /**
  * @typedef {import('./canvas-app.js').CanvasAppSetup} CanvasAppSetup
@@ -19,7 +19,7 @@ const grainSize = width / gridWidth;
  */
 const render = (ctx) => {
 	// Clear the screen
-	ctx.fillStyle = 'white';
+	ctx.fillStyle = "white";
 	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
 	if (sand[gridWidth / 2] === 0) {
@@ -43,7 +43,7 @@ const render = (ctx) => {
 	}
 
 	// Draw the sand
-	ctx.fillStyle = 'tan';
+	ctx.fillStyle = "tan";
 	for (let index = sand.length - 1; index >= 0; index--) {
 		const grain = sand[index];
 		if (grain === 0) {
@@ -99,7 +99,7 @@ const sandApp = canvasApp({
 });
 
 
-document.addEventListener('DOMContentLoaded', () => {
-	const controls = sandApp.mount('#app');
+document.addEventListener("DOMContentLoaded", () => {
+	const controls = sandApp.mount("#app");
 	controls.play();
 });

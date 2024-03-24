@@ -1,25 +1,33 @@
 package views
 
+import "github.com/maxdevos49/m4xdev/utilities"
+
 templ Layout() {
 	<html>
 		<head>
 			<title>M4XDEV</title>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link rel="icon" type="image/x-icon" href="favicon.ico"/>
-			<link rel="stylesheet" type="text/css" href="/css/reset.css"/>
-			<link rel="stylesheet" type="text/css" href="/css/utilities.css"/>
+			<link rel="icon" type="image/x-icon" href={ utilities.AssetURL("/favicon.ico") }/>
+			<link rel="stylesheet" type="text/css" href={ utilities.AssetURL("/css/reset.css") }/>
+			<link rel="stylesheet" type="text/css" href={ utilities.AssetURL("/css/utilities.css") }/>
+			<script src={ utilities.AssetURL("/js/page.js") } type="module" defer></script>
 		</head>
-		<body>
+		<body class="bg-black">
 			<nav>
-				<a href="/">M4XDEV</a>
+				<div class="bg-blue text-white p-1 bold">
+					<span id="header-date">...</span> <span class="mx-5px" id="header-time"></span>
+				</div>
+				<div class="p-1 bg-white border-bottom">
+					<a class="text-black text-decoration-none bold" href="/">M4XDEV</a>
+				</div>
 			</nav>
-			<main>
+			<main class="bg-white p-1">
 				{ children... }
 			</main>
-			<footer>
-				<span>© 2024 Maxwell DeVos</span>
-				<a href="/">Home</a>
+			<footer class="bg-black text-white text-center p-1">
+				<span>© 2024 Maxwell DeVos</span> |
+				<a class="text-white" href="/">Home</a>
 			</footer>
 		</body>
 	</html>

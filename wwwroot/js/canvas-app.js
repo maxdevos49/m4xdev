@@ -49,13 +49,13 @@
  * @returns {CanvasApp} A new canvas app instance.
  */
 function canvasApp(options) {
-	const canvas = document.createElement('canvas');
+	const canvas = document.createElement("canvas");
 	canvas.width = options.width || 800;
 	canvas.height = options.height || 600;
 
-	const ctx = canvas.getContext('2d');
+	const ctx = canvas.getContext("2d");
 	if (!ctx) {
-		throw new Error('Could not get 2d context from canvas');
+		throw new Error("Could not get 2d context from canvas");
 	}
 
 	/** @type {HTMLElement|null} */
@@ -64,9 +64,9 @@ function canvasApp(options) {
 	let loopControls = null;
 
 	return {
-		mount(selector = '#app') {
+		mount(selector = "#app") {
 			if (appContainer) {
-				throw new Error('App is already mounted. Unmount before mounting again.');
+				throw new Error("App is already mounted. Unmount before mounting again.");
 			}
 
 			appContainer = document.querySelector(selector);
@@ -74,7 +74,7 @@ function canvasApp(options) {
 				throw new Error(`Canvas container not found using selector: "${selector}"`);
 			}
 
-			appContainer.innerHTML = '';
+			appContainer.innerHTML = "";
 			appContainer.appendChild(canvas);
 
 			loopControls = createLoopControls(options, ctx);
@@ -83,15 +83,15 @@ function canvasApp(options) {
 		},
 		unmount() {
 			if (!appContainer) {
-				throw new Error('App is not mounted.');
+				throw new Error("App is not mounted.");
 			}
 
 			if (!loopControls) {
-				throw new Error('Loop controls not defined.');
+				throw new Error("Loop controls not defined.");
 			}
 
 			loopControls.pause();
-			appContainer.innerHTML = '';
+			appContainer.innerHTML = "";
 
 			appContainer = null;
 			loopControls = null;

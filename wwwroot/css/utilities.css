@@ -1,0 +1,52 @@
+/* Color utilities */
+
+.bg-blue {
+	background-color: rgb(58, 98, 244);
+}
+
+.bg-black {
+	background-color: black;
+}
+
+.bg-white {
+	background-color: white;
+}
+
+.text-white {
+	color: white;
+}
+
+.text-black {
+	color: black;
+}
+
+/* Text utilities */
+
+.text-decoration-none {
+	text-decoration: none;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.bold {
+	font-weight: 600;
+}
+
+/* Border utilities */
+
+.border-bottom {
+	border-bottom: 1px solid rgb(153, 153, 153);
+}
+
+/* Spacing utilities */
+
+.p-1 {
+	padding: 0.5rem;
+}
+
+.mx-5px {
+	margin-left: 5px;
+	margin-right: 5px;
+}
