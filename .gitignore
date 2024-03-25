@@ -28,3 +28,4 @@ assets
 .embed
 *_templ.go
 *.fiber.gz
+.env

@@ -6,8 +6,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 
 	"github.com/maxdevos49/m4xdev/handlers"
+	"github.com/maxdevos49/m4xdev/views"
 )
 
 func main() {
@@ -15,17 +17,18 @@ func main() {
 
 	app.Use(helmet.New())
 	app.Use(logger.New())
+	app.Use(recover.New())
 
 	app.Static("/", "./wwwroot", fiber.Static{
 		Compress: true,
-		// If a bundling step is added consider the following along with the use of utils.AssetURL
-		// MaxAge:   60 * 60 * 24 * 30, // Cache static assets for 30 days
+		MaxAge:   60 * 60 * 12,
 	})
 
 	app.Get("/", handlers.Home)
 
-	// TODO 404 page
-	// TODO 500 page
+	app.Use(func(c *fiber.Ctx) error {
+		return handlers.Render(c, views.View404())
+	})
 
 	if err := app.Listen(":3002"); err != nil {
 		log.Fatal(err)

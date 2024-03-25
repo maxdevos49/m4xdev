@@ -1,0 +1,12 @@
+package views
+
+import "github.com/maxdevos49/m4xdev/utilities"
+
+templ View404() {
+	@Layout() {
+		<div class="text-center">
+			<img class="img-contain" src={ utilities.AssetURL("/img/404.png") } height="250"/>
+			<p>Oops you got lost in the wilderness. Return home <a href="/">here</a></p>
+		</div>
+	}
+}
