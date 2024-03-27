@@ -1,5 +1,7 @@
 package views
 
+import "github.com/maxdevos49/m4xdev/utilities"
+
 templ Home() {
 	@Layout() {
 		<style>
@@ -7,7 +9,11 @@ templ Home() {
 				border: 1px solid black;
 			}
 		</style>
+		<div>
+			<canvas id="sketcher-test" width="500" height="500">Dude update your browser.</canvas>
+		</div>
 		<div id="app"></div>
-		<script src="/js/sand.js" type="module" defer></script>
+		<script src={ utilities.AssetURL("/js/sand.js") } type="module" defer></script>
+		<script src={ utilities.AssetURL("/js/sketcher-tests.js") } type="module" defer></script>
 	}
 }
