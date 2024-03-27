@@ -46,6 +46,14 @@
 	padding: 0.5rem;
 }
 
+.mt-1 {
+	margin-top: 0.5rem;
+}
+
+.ml-1 {
+	margin-left: 0.5rem;
+}
+
 .mx-5px {
 	margin-left: 5px;
 	margin-right: 5px;
@@ -55,4 +63,16 @@
 .img-contain {
 	object-fit: contain;
 	max-width: 100%;
+}
+
+.flex {
+	display: flex;
+}
+
+.flex-col {
+	flex-direction: column;
+}
+
+.flex-row {
+	flex-direction: row;
 }

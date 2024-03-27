@@ -38,11 +38,11 @@ export function ImageSketcher(imageData) {
 					} else {
 						if (line.length > 2) {
 							const secondPrevious = line[line.length - 2];
-							const [x1, y1] = indexToXY(imageData, secondPrevious);
-							const [x2, y2] = indexToXY(imageData, previous);
+							const [x1, y1] = indexToXY(imageData.width, imageData.height, secondPrevious);
+							const [x2, y2] = indexToXY(imageData.width, imageData.height, previous);
 							const previousSlope = (y2 - y1) / (x2 - x1);
 
-							const [x3, y3] = indexToXY(imageData, point);
+							const [x3, y3] = indexToXY(imageData.width, imageData.height, point);
 							const nextSlope = (y3 - y2) / (x3 - x2);
 							if (previousSlope === nextSlope) {//TODO fix: sometimes slope is infinity!
 								line[line.length - 1] = point;
@@ -61,7 +61,7 @@ export function ImageSketcher(imageData) {
 				}
 			} while (point !== null);
 
-			if (line.length > 1) {
+			if (line.length > 5) {
 				lines.push(line);
 			}
 		}
@@ -229,14 +229,15 @@ function searchIndexes(imageData, index) {
 /**
  * Converts a index position to a x/y position.
  *
- * @param {ImageData} imageData
+ * @param {number} width
+ * @param {number} height
  * @param {number} index
  *
  * @returns {[x: number, y: number]}
  */
-export function indexToXY(imageData, index) {
+export function indexToXY(width, height, index) {
 	return [
-		(index / 4) % imageData.height + 1,
-		(index / 4) / imageData.width + 1
+		(index / 4) % height + 1,
+		(index / 4) / width + 1
 	];
 }

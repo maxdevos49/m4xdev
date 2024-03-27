@@ -6,13 +6,45 @@ templ Home() {
 	@Layout() {
 		<style>
 			canvas {
-				border: 1px solid black;
+				border: 1px solid rgb(146, 146, 146);
 			}
 		</style>
-		<div>
-			<canvas id="sketcher-test" width="500" height="500">Dude update your browser.</canvas>
+		<div class="flex flex-col">
+			<div class="flex flex-row">
+				<canvas id="sketcher-canvas" width="500" height="500">Dude update your browser.</canvas>
+				<fieldset class="flex flex-col ml-1">
+					<legend>Image Sketcher</legend>
+					<form id="sketcher-form">
+						<div class="p-1 flex flex-col">
+							<label>Custom Image</label>
+							<input id="sketcher-image" type="file" name="sketcher-image" accept="image/png, image/jpeg" class="mt-1" required/>
+						</div>
+						<div class="p-1">
+							<button type="submit">Draw!</button>
+						</div>
+					</form>
+					<hr/>
+					<div class="p-1 flex flex-col">
+						<label class="bold">
+							Stats
+						</label>
+						<dl>
+							<dt>Total Lines</dt>
+							<dd id="sketcher-lines">0</dd>
+							<dt>Total Points</dt>
+							<dd id="sketcher-points">0</dd>
+							<dt>Progress</dt>
+							<dd id="sketcher-progress">0%</dd>
+						</dl>
+						<label>
+							Data
+						</label>
+						<textarea id="sketcher-data" rows="8" class="mt-1" readonly></textarea>
+					</div>
+				</fieldset>
+			</div>
+			<div id="app"></div>
 		</div>
-		<div id="app"></div>
 		<script src={ utilities.AssetURL("/js/sand.js") } type="module" defer></script>
 		<script src={ utilities.AssetURL("/js/sketcher-tests.js") } type="module" defer></script>
 	}
