@@ -3,6 +3,7 @@ services:
 
   # Golang HTTP webserver
   server:
+    pull_policy: build
     build:
       context: .
       target: final
