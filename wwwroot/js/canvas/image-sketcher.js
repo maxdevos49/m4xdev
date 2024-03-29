@@ -8,68 +8,62 @@ export function ImageSketcher(imageData) {
 	const lines = [];
 	const data = imageData.data;
 
-	let previousPixel = data[0];
+	let previousScanPixel = data[0];
 	for (let i = 0; i < data.length; i += 4) {
-		const currentPixel = data[i];
+		const currentScanPixel = data[i];
 
-		if (previousPixel === 0 && currentPixel === 255) {
+		if (previousScanPixel === 0 && currentScanPixel === 255 || previousScanPixel === 255 && currentScanPixel === 0) {
 			/** @type {number|null} */
-			let point = i - 4;
-			const line = [point];
+			let currentEdgePixel = currentScanPixel === 255 ? i - 4 : i;
+			const line = [currentEdgePixel];
 
 			do {
-				const offsets = searchIndexes(imageData, point);
+				const offsets = searchIndexes(imageData, currentEdgePixel);
 				const normal = normalDirection(imageData, offsets);
 
 				if (normal === null) {
 					break;
 				}
 
-				point = nextEdgePoint(imageData, offsets, normal);
-
-				if (point !== null) {
-					const previous = line[line.length - 1];
-
-					//TODO improve point deduping.
-					if (line.length > 1 && Math.abs(point - previous) === imageData.width) {// Dedupe vertical lines
-						line[line.length - 1] = point;
-					} else if (line.length > 1 && Math.abs(point - previous) === 4) {// Dedupe horizontal lines
-						line[line.length - 1] = point;
-					} else {
-						if (line.length > 2) {
-							const secondPrevious = line[line.length - 2];
-							const [x1, y1] = indexToXY(imageData.width, imageData.height, secondPrevious);
-							const [x2, y2] = indexToXY(imageData.width, imageData.height, previous);
-							const previousSlope = (y2 - y1) / (x2 - x1);
-
-							const [x3, y3] = indexToXY(imageData.width, imageData.height, point);
-							const nextSlope = (y3 - y2) / (x3 - x2);
-							if (previousSlope === nextSlope) {//TODO fix: sometimes slope is infinity!
-								line[line.length - 1] = point;
-							} else {
-								line.push(point);
-							}
-
-						} else {
-							line.push(point);
-						}
-					}
-
-					if (point === line[0]) {
-						break;
-					}
+				currentEdgePixel = nextEdgePoint(imageData, offsets, normal);
+				if (currentEdgePixel === null || currentEdgePixel < 0) {
+					break;
 				}
-			} while (point !== null);
 
-			if (line.length > 5) {
+				const previousEdgePixel = line[line.length - 1];
+				const secondPreviousEdgePixel = line[line.length - 2];
+				const [cX, cY] = indexToXY(imageData.width, imageData.height, currentEdgePixel);
+				const [pX, pY] = indexToXY(imageData.width, imageData.height, previousEdgePixel);
+
+				if (line.length > 2) {
+					const [spX, spY] = indexToXY(imageData.width, imageData.height, secondPreviousEdgePixel);
+
+					const currentSlope = (cY - pY) / (cX - pX);
+					const previousSlope = (pY - spY) / (pX - spX);
+
+					if (cY === pY && pY === spY) { // Remove redundant horizontal points
+						line[line.length - 1] = currentEdgePixel;
+					} else if (cX === pX && pX === spX) { // Remove redundant vertical points
+						line[line.length - 1] = currentEdgePixel;
+					} else if (currentSlope - previousSlope === 0) { // Remove redundant diagonal points
+						line[line.length - 1] = currentEdgePixel;
+					} else {
+						line.push(currentEdgePixel);
+					}
+				} else {
+					line.push(currentEdgePixel);
+				}
+			} while (currentEdgePixel !== null && currentEdgePixel !== line[0]);
+
+			if (line.length > 1) {
 				lines.push(line);
 			}
 		}
 
-		previousPixel = currentPixel;
+		previousScanPixel = currentScanPixel;
 	}
 
-	return lines;
+	return lines.sort((a, b) => b.length - a.length);
 }
 
 const NormalDirection = {
@@ -168,7 +162,6 @@ function nextEdgePoint(imageData, offsets, normal) {
 		{value: imageData.data[offsets.bottomLeft] ?? 0, index: offsets.bottomLeft},
 		{value: imageData.data[offsets.left] ?? 0, index: offsets.left},
 		{value: imageData.data[offsets.topLeft] ?? 0, index: offsets.topLeft},
-		{value: imageData.data[offsets.top] ?? 0, index: offsets.top},
 	];
 
 	// cycle search array to the desired starting point based on the normal.
@@ -196,6 +189,14 @@ function nextEdgePoint(imageData, offsets, normal) {
 				return null;
 			}
 
+			// Don't follow already traveled lines.
+			if (previousPixel?.value === 1) {
+				continue;
+			}
+
+			// Prevent a new line starting on the edge which was already followed.
+			imageData.data[previousPixel.index] = 1;
+
 			return previousPixel.index;
 		}
 		previousPixel = pixel;
@@ -207,8 +208,6 @@ function nextEdgePoint(imageData, offsets, normal) {
 
 /**
  * Helper function to get search index positions.
- *
- * TODO consider including values in the returned object for the edge search function.
  *
  * @param {ImageData} imageData
  * @param {number} index The index to search around.
@@ -237,7 +236,7 @@ function searchIndexes(imageData, index) {
  */
 export function indexToXY(width, height, index) {
 	return [
-		(index / 4) % height + 1,
-		(index / 4) / width + 1
+		Math.floor((index / 4) % height + 1),
+		Math.floor((index / 4) / width + 1)
 	];
 }

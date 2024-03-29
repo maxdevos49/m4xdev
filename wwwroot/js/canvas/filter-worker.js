@@ -96,7 +96,7 @@ function sobelFilter(imageData) {
 		let result = Math.sqrt(resultX + resultY);
 
 		// Cleanup faint edges at the cost of some detail
-		if (result < 175) {
+		if (result < 126) {
 			result = 0;
 		} else {
 			result = 255;

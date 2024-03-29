@@ -25,10 +25,8 @@ function* sketchImage(pen, xOffset, yOffset, width, height, lines) {
 
 			pen.move(xOffset + x, yOffset + y);
 
-			if (i % 3 === 0) {
-				// Report progress
-				yield (100 * i) / lines.length;
-			}
+			// Report progress
+			yield (100 * i) / lines.length;
 		}
 
 		pen.up();
@@ -64,8 +62,6 @@ async function startSketch(image, state) {
 
 	const lines = ImageSketcher(sobelImageData);
 
-	shuffleArray(lines);
-
 	totalLinesDD.innerText = String(lines.length);
 	totalPointsDD.innerText = String(lines.flat().length);
 	dataTextArea.innerText = JSON.stringify({width: originalImageData.width, height: originalImageData.height, lines: lines});
@@ -83,7 +79,7 @@ async function startSketch(image, state) {
 		progressDD.textContent = progress.toFixed(1) + "%";
 
 		await new Promise((resolve) => {
-			setTimeout(resolve, 0);
+			setTimeout(resolve, 5);
 		});
 	}
 
@@ -164,25 +160,19 @@ async function main() {
 		}
 
 		const customImage = await LoadImageFromBlob(file);
-		startSketch(customImage, state);
+
+		const nextSketch = () => {
+			if (state.reset) {
+				setTimeout(nextSketch, 100);
+			}
+
+			startSketch(customImage, state);
+		};
+
+		setTimeout(nextSketch, 100);
 	});
 
 	const defaultImage = await LoadImage("/img/cube.jpeg");
 	startSketch(defaultImage, state);
 }
 main();
-
-/**
- *Randomly shuffle an array.
- *
- * @template T
- * @param {Array<T>} array
- */
-function shuffleArray(array) {
-	for (var i = array.length - 1; i > 0; i--) {
-		var j = Math.floor(Math.random() * (i + 1));
-		var temp = array[i];
-		array[i] = array[j];
-		array[j] = temp;
-	}
-}

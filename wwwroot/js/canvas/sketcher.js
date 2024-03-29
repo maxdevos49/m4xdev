@@ -1,5 +1,3 @@
-
-
 /**
  * Provides a simple canvas line drawing api.
  *
@@ -15,10 +13,13 @@
  *
  */
 export function Sketcher(ctx) {
+	const colors = ["red", "blue", "green", "yellow", "purple", "orange", "black", "brown"];
+
 	const state = {
 		down: false,
 		x: 0,
-		y: 0
+		y: 0,
+		color: "red",
 	};
 
 	return {
@@ -32,6 +33,12 @@ export function Sketcher(ctx) {
 			state.down = true;
 			state.x = x;
 			state.y = y;
+			const temp = colors.shift();
+			if (!temp) {
+				throw new Error("Missing color");
+			}
+			colors.push(state.color);
+			state.color = temp;
 		},
 		/**
 		 * Move the pen to the given position. Draws a line if the pen is down.
@@ -46,7 +53,7 @@ export function Sketcher(ctx) {
 				ctx.moveTo(state.x, state.y);
 				ctx.lineTo(x, y);
 				ctx.lineWidth = 1;
-				ctx.strokeStyle = "red";
+				ctx.strokeStyle = state.color;
 				ctx.stroke();
 				ctx.restore();
 			}
@@ -62,4 +69,3 @@ export function Sketcher(ctx) {
 		}
 	};
 }
-

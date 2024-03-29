@@ -21,7 +21,6 @@ func main() {
 
 	app.Static("/", "./wwwroot", fiber.Static{
 		Compress: true,
-		MaxAge:   60 * 60 * 12,
 	})
 
 	app.Get("/", handlers.Home)
