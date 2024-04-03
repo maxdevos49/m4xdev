@@ -10,6 +10,42 @@ templ Home() {
 			}
 		</style>
 		<div class="flex flex-col">
+			<!-- Element data binding -->
+			<div class="flex flex-row">
+				<fieldset>
+					<legend>Data Binding</legend>
+					<div>
+						<input id="bind-text" type="text" value="Hello, World!"/>
+						<dl>
+							<dt>Value</dt>
+							<dd id="bound-text-value"></dd>
+							<dt>Length</dt>
+							<dd id="bound-text-value-length"></dd>
+						</dl>
+					</div>
+					<div>
+						<label>Range</label>
+						<input id="bind-range" type="range" min="0" max="255"/>
+						<dl>
+							<dt>Value</dt>
+							<dd id="bound-range-value"></dd>
+						</dl>
+					</div>
+					<div>
+						<label>Select</label>
+						<select id="bind-select">
+							<option value="1">Option 1</option>
+							<option value="2">Option 2</option>
+							<option value="3">Option 3</option>
+						</select>
+						<dl>
+							<dt>Value</dt>
+							<dd id="bound-select-value"></dd>
+						</dl>
+					</div>
+				</fieldset>
+			</div>
+			<!-- Image tracer -->
 			<div class="flex flex-row">
 				<canvas id="sketcher-canvas" width="500" height="500">Dude update your browser.</canvas>
 				<fieldset class="flex flex-col ml-1">
@@ -43,9 +79,11 @@ templ Home() {
 					</div>
 				</fieldset>
 			</div>
+			<!-- Sand simulation -->
 			<div id="app"></div>
 		</div>
 		<script src={ utilities.AssetURL("/js/sand.js") } type="module" defer></script>
 		<script src={ utilities.AssetURL("/js/image-tracer.js") } type="module" defer></script>
+		<script src={ utilities.AssetURL("/js/data-binding.js") } type="module" defer></script>
 	}
 }

@@ -1,9 +1,9 @@
 /**
- * Provides generators for sketching the hard edges in an image.(Incomplete)
+ * Generates lines for tracing a image.
  *
  * @param {ImageData} imageData
  */
-export function ImageSketcher(imageData) {
+export function TraceImage(imageData) {
 	/** @type {Array<Array<number>>} */
 	const lines = [];
 	const data = imageData.data;
@@ -63,7 +63,65 @@ export function ImageSketcher(imageData) {
 		previousScanPixel = currentScanPixel;
 	}
 
-	return lines.sort((a, b) => b.length - a.length);
+	// Stats change:
+	// Lines: 1177 -> 232
+	// Points; 5248 -> 4303
+
+	// Attempt to connect lines sharing points
+	outer_loop: for (let i = lines.length - 1; i >= 0; i--) {
+		const primaryLine = lines[i];
+		const primaryLineStart = primaryLine[0];
+		const primaryLineEnd = primaryLine[primaryLine.length - 1];
+
+		for (let j = lines.length - 1; j >= 0; j--) {
+			if (i === j) {
+				continue;
+			}
+
+			const secondaryLine = lines[j];
+			const secondaryLineStart = secondaryLine[0];
+			const secondaryLineEnd = secondaryLine[secondaryLine.length];
+
+			if (primaryLineEnd === secondaryLineStart) {
+				const tempArray = lines.splice(j, 1)[0];
+				tempArray.shift();
+				primaryLine.push(...tempArray);
+				continue outer_loop;
+			}
+
+			if (primaryLineStart === secondaryLineEnd) {
+				const tempArray = lines.splice(i, 1)[0];
+				tempArray.shift();
+				secondaryLine.push(...tempArray);
+				continue outer_loop;
+			}
+		}
+	}
+
+	return lines
+		.map(l => optimizeLine(imageData.width, imageData.height, l))
+		.filter(l => {
+			let distance = 0;
+
+			/**
+			 * Gets the distance between two points.
+			 *
+			 * @param {number} point1
+			 * @param {number} point2
+			 */
+			const measure = (point1, point2) => {
+				const [x1, y1] = indexToXY(imageData.width, imageData.height, point1);
+				const [x2, y2] = indexToXY(imageData.width, imageData.height, point2);
+
+				return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+			};
+
+			for (let i = 1; i < l.length; i++) {
+				distance += measure(l[i - 1], l[i]);
+			}
+
+			return distance > 5;
+		});
 }
 
 const NormalDirection = {
@@ -162,6 +220,7 @@ function nextEdgePoint(imageData, offsets, normal) {
 		{value: imageData.data[offsets.bottomLeft] ?? 0, index: offsets.bottomLeft},
 		{value: imageData.data[offsets.left] ?? 0, index: offsets.left},
 		{value: imageData.data[offsets.topLeft] ?? 0, index: offsets.topLeft},
+		{value: imageData.data[offsets.top] ?? 0, index: offsets.top},
 	];
 
 	// cycle search array to the desired starting point based on the normal.
@@ -173,24 +232,23 @@ function nextEdgePoint(imageData, offsets, normal) {
 		search.push(el);
 	}
 
-	/**@type {{value: number, index: number}|null} */
-	let previousPixel = null;
-	for (let i = 0; i < search.length; i++) {
-		const pixel = search[i];
+	/**@type {{value: number, index: number}|undefined} */
+	let currentPixel, previousPixel;
+	while ((currentPixel = search.shift())) {
 
 		// Prevent wrap around edge following
-		const doNotFollow = (pixel.index % (imageData.width * 4)) === 0 || (pixel.index % (imageData.width * 4)) === ((imageData.width - 1) * 4);
+		const doNotFollow = (currentPixel.index % (imageData.width * 4)) === 0 || (currentPixel.index % (imageData.width * 4)) === ((imageData.width - 1) * 4);
 		if (doNotFollow) {
 			continue;
 		}
 
-		if (pixel.value === 255) {
-			if (previousPixel === null) {
+		if (currentPixel.value === 255) {
+			if (!previousPixel) {
 				return null;
 			}
 
 			// Don't follow already traveled lines.
-			if (previousPixel?.value === 1) {
+			if (previousPixel.value === 1) {
 				continue;
 			}
 
@@ -199,7 +257,7 @@ function nextEdgePoint(imageData, offsets, normal) {
 
 			return previousPixel.index;
 		}
-		previousPixel = pixel;
+		previousPixel = currentPixel;
 	}
 
 	return null;
@@ -239,4 +297,37 @@ export function indexToXY(width, height, index) {
 		Math.floor((index / 4) % height + 1),
 		Math.floor((index / 4) / width + 1)
 	];
+}
+
+/**
+ * Attempts to reduce the total amount of points required to represent a line without losing detail.
+ *
+ * @param {number} width Image width
+ * @param {number} height Image height
+ * @param {Array<number>} line line points stored in a 1 dimensional array.
+ */
+function optimizeLine(width, height, line) {
+	if (line.length < 2) {
+		return line;
+	}
+
+	for (let i = line.length - 1; i >= 0; i--) {
+		const [cX, cY] = indexToXY(width, height, line[i]);
+		const [pX, pY] = indexToXY(width, height, line[i - 1]);
+		const [spX, spY] = indexToXY(width, height, line[i - 2]);
+
+		const currentSlope = (cY - pY) / (cX - pX);
+		const previousSlope = (pY - spY) / (pX - spX);
+
+		if (
+			(cY === pY && pY === spY)  // Remove redundant horizontal points
+			|| (cX === pX && pX === spX) // Remove redundant vertical points
+			|| (currentSlope - previousSlope === 0)  // Remove redundant diagonal points
+		) {
+			line.splice(i - 1, 1);
+		}
+	}
+
+
+	return line;
 }

@@ -13,7 +13,7 @@
  *
  */
 export function Sketcher(ctx) {
-	const colors = ["red", "blue", "green", "yellow", "purple", "orange", "black", "brown"];
+	const colors = ["red", "orange", "green", "blue", "purple", "black"];
 
 	const state = {
 		down: false,

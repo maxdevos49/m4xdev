@@ -1,5 +1,5 @@
 import {FilterImageData} from "./canvas/filter.js";
-import {ImageSketcher, indexToXY} from "./canvas/image-sketcher.js";
+import {TraceImage, indexToXY} from "./canvas/image-sketcher.js";
 import {Sketcher} from "./canvas/sketcher.js";
 import {LoadImage, LoadImageFromBlob} from "./content/image.js";
 
@@ -14,6 +14,8 @@ import {LoadImage, LoadImageFromBlob} from "./content/image.js";
  * @param {Array<Array<number>>} lines
  */
 function* sketchImage(pen, xOffset, yOffset, width, height, lines) {
+	const totalPoints = lines.flat().length;
+	let currentPoint = 0;
 	for (let i = 0; i < lines.length; i++) {
 		const line = lines[i];
 		const [sx, sy] = indexToXY(width, height, line[0]);
@@ -26,7 +28,8 @@ function* sketchImage(pen, xOffset, yOffset, width, height, lines) {
 			pen.move(xOffset + x, yOffset + y);
 
 			// Report progress
-			yield (100 * i) / lines.length;
+			currentPoint++;
+			yield (100 * currentPoint) / totalPoints;
 		}
 
 		pen.up();
@@ -60,7 +63,7 @@ async function startSketch(image, state) {
 
 	const sobelImageData = ctx.getImageData(0, height / 2, width / 2, height / 2, {colorSpace: "srgb"});
 
-	const lines = ImageSketcher(sobelImageData);
+	const lines = TraceImage(sobelImageData);
 
 	totalLinesDD.innerText = String(lines.length);
 	totalPointsDD.innerText = String(lines.flat().length);
