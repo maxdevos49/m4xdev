@@ -1,9 +1,9 @@
-import {canvasApp} from "./canvas-app.js";
+import {canvasApp} from "./canvas/canvas-app.js";
 
 /**
- * @typedef {import('./canvas-app.js').CanvasAppSetup} CanvasAppSetup
- * @typedef {import('./canvas-app.js').CanvasAppUpdate} CanvasAppUpdate
- * @typedef {import('./canvas-app.js').CanvasAppRender} CanvasAppRender
+ * @typedef {import('./canvas/canvas-app.js').CanvasAppSetup} CanvasAppSetup
+ * @typedef {import('./canvas/canvas-app.js').CanvasAppUpdate} CanvasAppUpdate
+ * @typedef {import('./canvas/canvas-app.js').CanvasAppRender} CanvasAppRender
  */
 
 const width = 500;
