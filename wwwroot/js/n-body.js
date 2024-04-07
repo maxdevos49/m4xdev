@@ -13,6 +13,7 @@
 import {bindInput} from "./state/bind/input.js";
 import {createEffect} from "./state/effect.js";
 import {Particle} from "./structures/particle.js";
+import {CircularBuffer} from "./structures/queue.js";
 import {Rectangle} from "./structures/rectangle.js";
 import {Vector} from "./structures/vector.js";
 
@@ -84,7 +85,7 @@ function main() {
 	/**@type {HTMLCanvasElement|null} */
 	const canvas = document.querySelector("canvas#nbody-canvas");
 	if (canvas === null) {
-		throw new Error("Failed to find canvas#nbody-canvas");
+		throw new Error("Failed to find element \"canvas#nbody-canvas\"");
 	}
 
 	const ctx = canvas.getContext("2d");
@@ -119,7 +120,9 @@ function main() {
 						Number(gravityConstant.get()),
 						Number(blackholeMass.get()),
 						new Vector().sub(position).mag()
-					) * Number(simulationScale.get()));
+					) * Number(simulationScale.get()));//TODO fix: This multiplication does not work at different simulation scales.
+
+				console.log(new Vector().sub(position).mag());
 
 				return new Particle(Number(starMass.get()), position, velocity);
 			});
@@ -167,9 +170,16 @@ function main() {
 			return updatedParticles;
 		};
 
-
+		let step = 0;
 		let nextAnimationFrame = 0;
-		const render = () => {
+		let previousTime = 0;
+		/** @type {CircularBuffer<number>} */
+		const previousFrameRates = new CircularBuffer(60);
+		/** @type {CircularBuffer<number>} */
+		const previousFrameTimes = new CircularBuffer(30);
+
+		/** @param {DOMHighResTimeStamp} time */
+		const render = (time) => {
 			nextParticles = update(nextParticles);
 
 			ctx.fillStyle = "black";
@@ -189,6 +199,21 @@ function main() {
 			}
 
 			ctx.restore();
+
+			const delta = time - previousTime;
+			previousFrameTimes.put(delta);
+			previousFrameRates.put(1000 / delta);
+			previousTime = time;
+
+			const averageFrameTime = previousFrameTimes.data().reduce((acc, v) => acc + v, 0) / previousFrameTimes.data().length;
+			const averageFPS = previousFrameRates.data().reduce((acc, v) => acc + v, 0) / previousFrameRates.data().length;
+
+			ctx.font = "16px serif";
+			ctx.fillStyle = "white";
+			ctx.fillText("FPS: " + averageFPS.toFixed(1), 5, 16);
+			ctx.fillText("Frame Time: " + averageFrameTime.toFixed(1) + "ms", 5, 16 * 2);
+			ctx.fillText("Step: " + step++, 5, 16 * 3);
+
 
 			nextAnimationFrame = requestAnimationFrame(render);
 		};
