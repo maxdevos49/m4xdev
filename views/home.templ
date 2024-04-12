@@ -17,7 +17,7 @@ templ Home() {
 					<legend>N-body Simulation</legend>
 					<div>
 						<label>Particles</label>
-						<input id="nbody-particle-count" type="number" value="700"/>
+						<input id="nbody-particle-count" type="number" value="5000"/>
 					</div>
 					<div>
 						<label>Simulation Scale</label>
@@ -33,11 +33,15 @@ templ Home() {
 					</div>
 					<div>
 						<label>Blackhole mass</label>
-						<input id="nbody-blackhole-mass" type="number" value="2000000" step="100000" min="1"/>
+						<input id="nbody-blackhole-mass" type="number" value="20000000" step="100000" min="0"/>
 					</div>
 					<div>
 						<label>Star mass range</label>
-						<input id="nbody-star-mass" type="number" value="100" step="10" min="1"/>
+						<input id="nbody-star-mass" type="number" value="1000" step="10" min="0"/>
+					</div>
+					<div>
+						<label>Theta</label>
+						<input id="nbody-theta" type="number" value="0.8" step="0.1" min="0"/>
 					</div>
 				</fieldset>
 			</div>

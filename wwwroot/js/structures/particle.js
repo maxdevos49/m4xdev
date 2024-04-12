@@ -37,12 +37,14 @@ export class Particle {
 	/**
 	 * Applies a force to a particle.
 	 *
-	 * @param {Vector} force
+	 * @param {Vector} netForce
 	 *
 	 * @returns {Particle}
 	 */
-	applyForce(force) {
-		this.velocity.add(force);
+	applyForce(netForce) {
+		// acceleration = netForce/mass
+		const acceleration = Vector.div(netForce, this.mass);
+		this.velocity.add(acceleration);
 		this.position.add(this.velocity);
 
 		return this;

@@ -5,29 +5,11 @@ export class QuadTree {
 	#bounds;
 	/** @type {number} */
 	#capacity;
-	/** @type {Array<import("./point.js").Point>} */
+	/** @type {Array<import("./vector.js").Vector>} */
 	#points;
 
-	/**@type {QuadTree|null} */
-	#ne;
-	/** @type {Rectangle} */
-	#neBounds;
-
-	/**@type {QuadTree|null} */
-	#se;
-	/** @type {Rectangle} */
-	#seBounds;
-
-	/**@type {QuadTree|null} */
-	#sw;
-	/** @type {Rectangle} */
-	#swBounds;
-
-	/**@type {QuadTree|null} */
-	#nw;
-	/** @type {Rectangle} */
-	#nwBounds;
-
+	/**@type {[QuadTree|null, QuadTree|null, QuadTree|null, QuadTree|null]} */
+	#quadrants;
 
 	/**
 	 * Constructs an instance of a QuadTree.
@@ -40,26 +22,13 @@ export class QuadTree {
 		this.#capacity = capacity;
 		this.#points = [];
 
-		const {x, y, width: w, height: h} = this.#bounds;
-
-		this.#ne = null;
-		this.#neBounds = new Rectangle(x + w / 2, y, w / 2, h / 2);
-
-		this.#se = null;
-		this.#seBounds = new Rectangle(x + w / 2, y + h / 2, w / 2, h / 2);
-
-		this.#sw = null;
-		this.#swBounds = new Rectangle(x, y + h / 2, w / 2, h / 2);
-
-		this.#nw = null;
-		this.#nwBounds = new Rectangle(x, y, w / 2, h / 2);
-
+		this.#quadrants = [null, null, null, null];
 	}
 
 	/**
 	 * Insert a point into the QuadTree.
 	 *
-	 * @param {import("./point.js").Point} point
+	 * @param {import("./vector.js").Vector} point
 	 *
 	 * @returns {boolean}
 	 */
@@ -74,48 +43,62 @@ export class QuadTree {
 			return true;
 		}
 
-		if (this.#neBounds.contains(point)) {
-			if (this.#ne === null) {
-				this.#ne = new QuadTree(this.#neBounds, this.#capacity);
-			}
+		const index = this.#whichQuadrantIndex(point);
 
-			return this.#ne.insert(point);
+		if (this.#quadrants[index] === null) {
+			this.#quadrants[index] = new QuadTree(this.#quadrantBounds(index), this.#capacity);
 		}
 
-		if (this.#seBounds.contains(point)) {
-			if (this.#se === null) {
-				this.#se = new QuadTree(this.#seBounds, this.#capacity);
-			}
+		return this.#quadrants[index]?.insert(point) ?? false;
+	}
 
-			return this.#se.insert(point);
+	/**
+	 * Determines which quadrant a point is within.
+	 *
+	 * @param {import("./vector.js").Vector} point
+	 *
+	 * @returns {0|1|2|3}
+	 */
+	#whichQuadrantIndex(point) {
+		if (point.x > this.#bounds.centerX && point.y < this.#bounds.centerY) {
+			return 0;// ne
+		} else if (point.x > this.#bounds.centerX && point.y > this.#bounds.centerY) {
+			return 1; // se
+		} else if (point.x < this.#bounds.centerX && point.y > this.#bounds.centerY) {
+			return 2; // sw
+		} else {
+			return 3;// nw
 		}
+	}
 
-		if (this.#swBounds.contains(point)) {
-			if (this.#sw === null) {
-				this.#sw = new QuadTree(this.#swBounds, this.#capacity);
-			}
+	/**
+	 * Gets the bounds for the given quadrant
+	 *
+	 * @param {0|1|2|3} index
+	 *
+	 * @returns {Rectangle}
+	 */
+	#quadrantBounds(index) {
+		const {x, y, width, height, centerX, centerY} = this.#bounds;
 
-			return this.#sw.insert(point);
+		if (index === 0) {
+			return new Rectangle(centerX, y, width / 2, height / 2);
+		} else if (index === 1) {
+			return new Rectangle(centerX, centerY, width / 2, height / 2);
+		} else if (index === 2) {
+			return new Rectangle(x, centerY, width / 2, height / 2);
+		} else {
+			return new Rectangle(x, y, width / 2, height / 2);
 		}
-
-		if (this.#nwBounds.contains(point)) {
-			if (this.#nw === null) {
-				this.#nw = new QuadTree(this.#nwBounds, this.#capacity);
-			}
-
-			return this.#nw.insert(point);
-		}
-
-		return false;
 	}
 
 	/**
 	 * Queries the points located inside a given range.
 	 *
 	 * @param {Rectangle} range
-	 * @param {import("./point.js").Point[]} found
+	 * @param {import("./vector.js").Vector[]} found
 	 *
-	 * @returns {import("./point.js").Point[]}
+	 * @returns {import("./vector.js").Vector[]}
 	 */
 	query(range, found = []) {
 		if (!this.#bounds.intersects(range)) {
@@ -128,10 +111,10 @@ export class QuadTree {
 			}
 		}
 
-		this.#ne?.query(range, found);
-		this.#se?.query(range, found);
-		this.#sw?.query(range, found);
-		this.#nw?.query(range, found);
+		this.#quadrants[0]?.query(range, found);
+		this.#quadrants[1]?.query(range, found);
+		this.#quadrants[2]?.query(range, found);
+		this.#quadrants[3]?.query(range, found);
 
 		return found;
 	}
@@ -140,16 +123,16 @@ export class QuadTree {
 	 * Renders a QuadTree boundaries.
 	 *
 	 * @param {CanvasRenderingContext2D} ctx
+	 * @param {number} simulationScale
 	 */
-	show(ctx) {
+	show(ctx, simulationScale) {
 		ctx.beginPath();
 		ctx.strokeStyle = "green";
-		ctx.rect(this.#bounds.x, this.#bounds.y, this.#bounds.width, this.#bounds.height);
+		ctx.rect(this.#bounds.x / simulationScale, this.#bounds.y / simulationScale, this.#bounds.width / simulationScale, this.#bounds.height / simulationScale);
 		ctx.stroke();
 
-		this.#ne?.show(ctx);
-		this.#se?.show(ctx);
-		this.#sw?.show(ctx);
-		this.#nw?.show(ctx);
+		for (const quadrant of this.#quadrants) {
+			quadrant?.show(ctx, simulationScale);
+		}
 	}
 }

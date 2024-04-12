@@ -52,10 +52,18 @@ export class Rectangle {
 		return this.#x;
 	}
 
+	get centerX() {
+		return this.#x + this.#w / 2;
+	}
+
+	get centerY() {
+		return this.#y + this.#h / 2;
+	}
+
 	/**
 	 * Indicates if a point is inside the rectangle.
 	 *
-	 * @param {import("./point.js").Point} point
+	 * @param {import("./vector.js").Vector} point
 	 *
 	 * @returns {boolean}
 	 */

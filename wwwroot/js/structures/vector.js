@@ -408,6 +408,16 @@ export class Vector {
 	}
 
 	/**
+	 * Gets the distance between two vectors.
+	 *
+	 * @param {Vector} vector1
+	 * @param {Vector} vector2
+	 */
+	static distance(vector1, vector2) {
+		return Vector.sub(vector1, vector2).mag();
+	}
+
+	/**
 	 * Creates a random vector where each component is between -1 and 1.
 	 *
 	 * @returns {Vector}
