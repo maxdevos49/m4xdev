@@ -3,7 +3,8 @@
 		"check": "tsc --noEmit",
 		"check:watch": "tsc --noEmit --watch",
 		"lint": "eslint wwwroot --fix",
-		"lint:check": "eslint wwwroot"
+		"lint:check": "eslint wwwroot",
+		"vendor-install": "wget --progress=bar --output-document"
 	},
 	"devDependencies": {
 		"eslint": "^8.57.0",

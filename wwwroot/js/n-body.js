@@ -210,7 +210,7 @@ function main() {
 		simulationDampening,
 		theta
 	], () => {
-		let simulationBounds = new Rectangle(-(canvas.width / 2) * simulationScale.get(), -(canvas.height / 2) * simulationScale.get(), canvas.width * simulationScale.get(), canvas.height * simulationScale.get());
+		let simulationBounds = new Rectangle(-canvas.width * 2 * simulationScale.get(), -canvas.height * 2 * simulationScale.get(), canvas.width * 4 * simulationScale.get(), canvas.height * 4 * simulationScale.get());
 
 		/** @type {Particle[]} */
 		let particles = [];
@@ -221,21 +221,21 @@ function main() {
 		const blackhole1Mass = blackholeMass.get();
 		const galaxy1Stars = particleCount.get() * ratio;
 		const galaxy1Position = new Vector();
-		const galaxy1Radius = (simulationBounds.width * ratio) * ratio;
+		const galaxy1Radius = (simulationBounds.width / 3);
 
 		const blackHole2Mass = blackholeMass.get() * ratio;
 		const galaxy2Stars = particleCount.get() - galaxy1Stars;
 		const galaxy2Position = new Vector(
-			renderBounds.width * ratio * simulationScale.get(),
-			renderBounds.height * ratio * simulationScale.get()
+			(renderBounds.width/2) * 3  * simulationScale.get(),
+			(renderBounds.height/2) * 3* simulationScale.get()
 		);
-		const galaxy2Radius = (simulationBounds.width * ratio) - galaxy1Radius;
+		const galaxy2Radius = (simulationBounds.width / 3) * ratio;
 
 		const blackhole2Velocity = Vector.cross(galaxy2Position, new Vector(0, 0, 1))
 			.normalize()
 			.mult(calculateCircularOrbitMagnitude(
 				gravityConstant.get(),
-				blackhole1Mass + starMass.get(),
+				blackhole1Mass + blackHole2Mass,
 				Vector.distance(new Vector(), galaxy2Position)
 			));
 
@@ -286,6 +286,7 @@ function main() {
 
 		// Blackhole 2
 		particles.push(new Particle(blackHole2Mass, galaxy2Position, blackhole2Velocity));
+
 
 		let qt = new BarnesHutQuadTree(simulationBounds);
 
@@ -363,13 +364,77 @@ function main() {
 			// qt.show(ctx, simulationScale.get());
 
 			for (const particle of particles) {
-				if (particle.mass === blackholeMass.get()) {
-					ctx.fillStyle = "red";
-				} else {
-					ctx.fillStyle = "white";
-				}
+				const gasSize = 30;
+				ctx.fillStyle = "rgba(43, 120, 255, 0.05)";
+				ctx.fillRect((particle.position.x / simulationScale.get()) - gasSize / 2, (particle.position.y / simulationScale.get()) - gasSize / 2, gasSize, gasSize);
 
-				ctx.fillRect((particle.position.x / simulationScale.get()) - 1, (particle.position.y / simulationScale.get()) - 1, 2, 2);
+				const dustColor = [
+					// main sequence
+					"rgba(1,1,1,0.09)",
+					"rgba(1,1,1,0.09)",
+					"rgba(1,1,1,0.1)",
+					// orange giant
+					"rgba(103,78,85,0.05)",
+					"rgba(103,78,85,0.05)",
+					"rgba(103,78,85,0.08)",
+					"rgba(103,78,85,0.08)",
+					// red super giant
+					"rgba(240, 220, 213, 0.06)",
+					"rgba(240, 220, 213, 0.07)",
+					"rgba(170, 76, 81, 0.05)",
+					"rgba(170, 76, 81, 0.06)",
+					"rgba(170, 76, 81, 0.07)",
+					"rgba(170, 76, 81, 0.07)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.1)",
+					"rgba(170, 76, 81, 0.2)",
+					"rgba(170, 76, 81, 0.3)",
+				];
+
+				const color = dustColor[Math.floor((dustColor.length * particle.mass) / (starMass.get() + 1))];
+
+				const dustSize = 16;
+				ctx.fillStyle = color;
+				ctx.fillRect((particle.position.x / simulationScale.get()) - dustSize / 2, (particle.position.y / simulationScale.get()) - dustSize / 2, dustSize, dustSize);
+
+				if (particle.mass === blackhole1Mass || particle.mass === blackHole2Mass) {
+					let starSize = 32;
+					ctx.fillStyle = "rgba(255, 220, 132, 0.1)";
+					ctx.beginPath();
+					ctx.ellipse((particle.position.x / simulationScale.get()), (particle.position.y / simulationScale.get()), starSize, starSize, 0, 0, Math.PI * 2);
+					ctx.fill();
+
+					starSize = 20;
+					ctx.fillStyle = "rgba(255, 220, 132, 0.4)";
+					ctx.beginPath();
+					ctx.ellipse((particle.position.x / simulationScale.get()), (particle.position.y / simulationScale.get()), starSize, starSize, 0, 0, Math.PI * 2);
+					ctx.fill();
+
+					starSize = 14;
+					ctx.fillStyle = "rgba(255, 220, 132, 0.7)";
+					ctx.beginPath();
+					ctx.ellipse((particle.position.x / simulationScale.get()), (particle.position.y / simulationScale.get()), starSize, starSize, 0, 0, Math.PI * 2);
+					ctx.fill();
+				} else {
+					const starSize = 2;
+					ctx.fillStyle = "rgba(255, 255, 255, 1)";
+					ctx.fillRect((particle.position.x / simulationScale.get()) - starSize / 2, (particle.position.y / simulationScale.get()) - starSize / 2, starSize, starSize);
+				}
 			}
 
 			ctx.restore();

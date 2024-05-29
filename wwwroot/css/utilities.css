@@ -78,5 +78,10 @@
 }
 
 .w-fit-content {
-	width: fit-content;
+	min-width: fit-content;
 }
+
+.w-100px {
+	width: 100px;
+}
+
