@@ -1,65 +1,66 @@
-import {Vector} from "./vector.js";
+import {VectorUtil} from "./vector.js";
 
-export class Particle {
+/**
+ * @typedef {object} Particle
+ * @property {number} mass
+ * @property {import("./vector.js").Vector} position
+ * @property {import("./vector.js").Vector} velocity
+ */
+
+
+/**
+ * Utility class to create and manage particles.
+ *
+ * @static
+ */
+export class ParticleUtil {
+
 	/**
-	 * Constructs an instance of a Vector.
+	 * Constructs a new Particle object literal.
 	 *
 	 * @param {number} mass
-	 * @param {Vector} position
-	 * @param {Vector} velocity
+	 * @param {import("./vector.js").Vector} position
+	 * @param {import("./vector.js").Vector} velocity
+	 *
+	 * @returns {Particle}
 	 */
-	constructor(mass, position, velocity = new Vector()) {
-		/**
-		 * The mass of the particle.
-		 *
-		 * @public
-		 * @type {Readonly<number>}
-		 */
-		this.mass = mass;
-
-		/**
-		 * The position of the particle.
-		 *
-		 * @public
-		 * @type {Readonly<Vector>}
-		 */
-		this.position = position;
-
-		/**
-		 * The velocity of the particle.
-		 *
-		 * @public
-		 * @type {Readonly<Vector>}
-		 */
-		this.velocity = velocity;
+	static create(mass, position, velocity = VectorUtil.create()) {
+		return {
+			mass,
+			position,
+			velocity
+		};
 	}
 
 	/**
 	 * Applies a force to a particle.
 	 *
-	 * @param {Vector} netForce
+	 * @param {Particle} particle
+	 * @param {import("./vector.js").Vector} netForce
 	 *
 	 * @returns {Particle}
 	 */
-	applyForce(netForce) {
+	static applyForce(particle, netForce) {
 		// acceleration = netForce/mass
-		const acceleration = Vector.div(netForce, this.mass);
-		this.velocity.add(acceleration);
-		this.position.add(this.velocity);
+		const acceleration = VectorUtil.div(netForce, particle.mass);
+		particle.velocity = VectorUtil.add(acceleration, particle.velocity);
+		particle.position = VectorUtil.add(particle.velocity, particle.position);
 
-		return this;
+		return particle;
 	}
 
 	/**
 	 * Creates a deep copy of the particle.
 	 *
+	 * @param {Particle} particle
+	 *
 	 * @returns {Particle}
 	 */
-	clone() {
-		return new Particle(
-			this.mass,
-			new Vector(this.position.x, this.position.y, this.position.z),
-			new Vector(this.velocity.x, this.velocity.y, this.velocity.z)
-		);
+	static clone(particle) {
+		return {
+			mass: particle.mass,
+			position: VectorUtil.create(particle.position.x, particle.position.y, particle.position.z),
+			velocity: VectorUtil.create(particle.velocity.x, particle.velocity.y, particle.velocity.z)
+		};
 	}
 }

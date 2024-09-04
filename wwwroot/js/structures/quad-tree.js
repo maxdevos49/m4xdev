@@ -5,7 +5,7 @@ export class QuadTree {
 	#bounds;
 	/** @type {number} */
 	#capacity;
-	/** @type {Array<import("./vector.js").Vector>} */
+	/** @type {Array<import("./vector.js").VectorUtil>} */
 	#points;
 
 	/**@type {[QuadTree|null, QuadTree|null, QuadTree|null, QuadTree|null]} */
@@ -28,7 +28,7 @@ export class QuadTree {
 	/**
 	 * Insert a point into the QuadTree.
 	 *
-	 * @param {import("./vector.js").Vector} point
+	 * @param {import("./vector.js").VectorUtil} point
 	 *
 	 * @returns {boolean}
 	 */
@@ -55,7 +55,7 @@ export class QuadTree {
 	/**
 	 * Determines which quadrant a point is within.
 	 *
-	 * @param {import("./vector.js").Vector} point
+	 * @param {import("./vector.js").VectorUtil} point
 	 *
 	 * @returns {0|1|2|3}
 	 */
@@ -96,9 +96,9 @@ export class QuadTree {
 	 * Queries the points located inside a given range.
 	 *
 	 * @param {Rectangle} range
-	 * @param {import("./vector.js").Vector[]} found
+	 * @param {import("./vector.js").VectorUtil[]} found
 	 *
-	 * @returns {import("./vector.js").Vector[]}
+	 * @returns {import("./vector.js").VectorUtil[]}
 	 */
 	query(range, found = []) {
 		if (!this.#bounds.intersects(range)) {

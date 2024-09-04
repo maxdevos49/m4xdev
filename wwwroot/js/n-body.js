@@ -12,19 +12,19 @@
 
 import {bindNumberInput} from "./state/bind/input.js";
 import {createEffect} from "./state/effect.js";
-import {Particle} from "./structures/particle.js";
 import {BarnesHutQuadTree} from "./structures/barnes-hut-quad-tree.js";
+import {ParticleUtil} from "./structures/particle.js";
 import {CircularBuffer} from "./structures/queue.js";
 import {Rectangle} from "./structures/rectangle.js";
-import {Vector} from "./structures/vector.js";
+import {VectorUtil} from "./structures/vector.js";
 
 /**
  * Generates a random position within a circle.
  *
- * @param {Vector} center
+ * @param {import('./structures/vector.js').Vector} center
  * @param {number} radius
  *
- * @returns {Vector}
+ * @returns {import('./structures/vector.js').Vector}
  */
 function generateCirclePosition(center, radius) {
 	// eslint-disable-next-line no-constant-condition
@@ -43,7 +43,7 @@ function generateCirclePosition(center, radius) {
 
 		// Accept the point with probability proportional to the density
 		if (Math.random() < probabilityDensity) {
-			return new Vector(x, y);
+			return VectorUtil.create(x, y);
 		}
 	}
 }
@@ -66,20 +66,20 @@ function calculateCircularOrbitMagnitude(gravityConstant, totalMass, distance) {
  * @param {number} gravityConstant
  * @param {number} dampeningConstant
  * @param {number} mass1
- * @param {Vector} position1
+ * @param {import('./structures/vector.js').Vector} position1
  * @param {number} mass2
- * @param {Vector} position2
+ * @param {import('./structures/vector.js').Vector} position2
  *
- * @returns {Vector}
+ * @returns {import('./structures/vector.js').Vector}
  */
 function calculateGravitationForce(gravityConstant, dampeningConstant, mass1, position1, mass2, position2) {
-	const directionVector = Vector.sub(position1, position2);
-	const distance = Math.max(Vector.mag(directionVector), dampeningConstant);
+	const directionVector = VectorUtil.sub(position1, position2);
+	const distance = Math.max(VectorUtil.mag(directionVector), dampeningConstant);
 
 	// - G ((m1 * m2) / (magnitude^2))
 	const forceScalar = -gravityConstant * ((mass1 * mass2) / (distance * distance));
 
-	return directionVector.normalize().mult(forceScalar);
+	return VectorUtil.mult(VectorUtil.normalize(directionVector), forceScalar);
 }
 
 /**
@@ -88,15 +88,15 @@ function calculateGravitationForce(gravityConstant, dampeningConstant, mass1, po
  * @param {number} gravityConstant
  * @param {number} dampeningConstant
  * @param {number} theta
- * @param {Particle} particle
+ * @param {import('./structures/particle.js').Particle} particle
  * @param {BarnesHutQuadTree} qt
  *
- * @returns {Vector}
+ * @returns {import('./structures/vector.js').Vector}
  */
 function barnesHutGravitate(gravityConstant, dampeningConstant, theta, particle, qt) {
 	if (qt.leaf) {
 		if (qt.particle === null || qt.particle === particle) {
-			return new Vector();
+			return VectorUtil.create();
 		}
 
 		return calculateGravitationForce(
@@ -109,7 +109,7 @@ function barnesHutGravitate(gravityConstant, dampeningConstant, theta, particle,
 		);
 	}
 
-	const distance = Vector.distance(qt.centerOfMass, particle.position);
+	const distance = VectorUtil.distance(qt.centerOfMass, particle.position);
 	if ((qt.width / distance) < theta) {
 		return calculateGravitationForce(
 			gravityConstant,
@@ -121,13 +121,13 @@ function barnesHutGravitate(gravityConstant, dampeningConstant, theta, particle,
 		);
 	}
 
-	const forces = new Vector();
+	let forces = VectorUtil.create();
 	for (const quadrant of qt.quadrants) {
 		if (quadrant === null) {
 			continue;
 		}
 
-		forces.add(barnesHutGravitate(gravityConstant, dampeningConstant, theta, particle, quadrant));
+		forces = VectorUtil.add(forces, barnesHutGravitate(gravityConstant, dampeningConstant, theta, particle, quadrant));
 	}
 
 	return forces;
@@ -161,8 +161,8 @@ function main() {
 	const MIN_ZOOM = 0.1;
 	let panning = false;
 	let zoom = 1;
-	const camera = new Vector(renderBounds.width / 2, renderBounds.height / 2);
-	const dragStart = new Vector();
+	const camera = VectorUtil.create(renderBounds.width / 2, renderBounds.height / 2);
+	const dragStart = VectorUtil.create();
 
 	canvas.addEventListener("wheel", (e) => {
 		e.preventDefault();
@@ -212,7 +212,7 @@ function main() {
 	], () => {
 		let simulationBounds = new Rectangle(-canvas.width * 2 * simulationScale.get(), -canvas.height * 2 * simulationScale.get(), canvas.width * 4 * simulationScale.get(), canvas.height * 4 * simulationScale.get());
 
-		/** @type {Particle[]} */
+		/** @type {import('./structures/particle.js').Particle[]} */
 		let particles = [];
 
 
@@ -220,42 +220,50 @@ function main() {
 
 		const blackhole1Mass = blackholeMass.get();
 		const galaxy1Stars = particleCount.get() * ratio;
-		const galaxy1Position = new Vector();
+		const galaxy1Position = VectorUtil.create();
 		const galaxy1Radius = (simulationBounds.width / 3);
 
 		const blackHole2Mass = blackholeMass.get() * ratio;
 		const galaxy2Stars = particleCount.get() - galaxy1Stars;
-		const galaxy2Position = new Vector(
-			(renderBounds.width/2) * 3  * simulationScale.get(),
-			(renderBounds.height/2) * 3* simulationScale.get()
+		const galaxy2Position = VectorUtil.create(
+			(renderBounds.width / 2) * 3 * simulationScale.get(),
+			(renderBounds.height / 2) * 3 * simulationScale.get()
 		);
 		const galaxy2Radius = (simulationBounds.width / 3) * ratio;
 
-		const blackhole2Velocity = Vector.cross(galaxy2Position, new Vector(0, 0, 1))
-			.normalize()
-			.mult(calculateCircularOrbitMagnitude(
+		const blackhole2Velocity = VectorUtil.mult(
+			VectorUtil.normalize(
+				VectorUtil.cross(
+					galaxy2Position,
+					VectorUtil.create(0, 0, 1))
+			),
+			calculateCircularOrbitMagnitude(
 				gravityConstant.get(),
 				blackhole1Mass + blackHole2Mass,
-				Vector.distance(new Vector(), galaxy2Position)
+				VectorUtil.distance(VectorUtil.create(), galaxy2Position)
 			));
 
 		// Blackhole 1 stars
 		for (let i = 0; i < galaxy1Stars; i++) {
 			const mass = Math.floor(Math.random() * starMass.get()) + 1;
-			const position = generateCirclePosition(new Vector(), galaxy1Radius);
+			const position = generateCirclePosition(VectorUtil.create(), galaxy1Radius);
 			position.z = 0;
 
-			const velocity = Vector.cross(position, new Vector(0, 0, 1))
-				.normalize()
-				.mult(calculateCircularOrbitMagnitude(
+			const velocity = VectorUtil.mult(
+				VectorUtil.normalize(
+					VectorUtil.cross(
+						position,
+						VectorUtil.create(0, 0, 1))
+				),
+				calculateCircularOrbitMagnitude(
 					gravityConstant.get(),
 					blackhole1Mass + mass,
-					Vector.distance(new Vector(), position)
+					VectorUtil.distance(VectorUtil.create(), position)
 				));
 
-			particles.push(new Particle(
+			particles.push(ParticleUtil.create(
 				mass,
-				position.translate(galaxy1Position.x, galaxy1Position.y),
+				VectorUtil.translate(position, galaxy1Position.x, galaxy1Position.y),
 				velocity
 			));
 		}
@@ -263,29 +271,32 @@ function main() {
 		// Blackhole 2 stars
 		for (let i = 0; i < galaxy2Stars; i++) {
 			const mass = Math.floor(Math.random() * starMass.get()) + 1;
-			const position = generateCirclePosition(new Vector(), galaxy2Radius);
+			const position = generateCirclePosition(VectorUtil.create(), galaxy2Radius);
 			position.z = 0;
 
-			const velocity = Vector.cross(position, new Vector(0, 0, 1))
-				.normalize()
-				.mult(calculateCircularOrbitMagnitude(
-					gravityConstant.get(),
-					blackHole2Mass + mass,
-					Vector.distance(new Vector(), position)
-				)).add(blackhole2Velocity);
+			const velocity = VectorUtil.add(
+				VectorUtil.mult(
+					VectorUtil.normalize(
+						VectorUtil.cross(position, VectorUtil.create(0, 0, 1)))
+					, calculateCircularOrbitMagnitude(
+						gravityConstant.get(),
+						blackHole2Mass + mass,
+						VectorUtil.distance(VectorUtil.create(), position)
+					)),
+				blackhole2Velocity);
 
-			particles.push(new Particle(
+			particles.push(ParticleUtil.create(
 				mass,
-				position.translate(galaxy2Position.x, galaxy2Position.y),
+				VectorUtil.translate(position, galaxy2Position.x, galaxy2Position.y),
 				velocity
 			));
 		}
 
 		// Blackhole 1
-		particles.push(new Particle(blackhole1Mass, galaxy1Position));
+		particles.push(ParticleUtil.create(blackhole1Mass, galaxy1Position));
 
 		// Blackhole 2
-		particles.push(new Particle(blackHole2Mass, galaxy2Position, blackhole2Velocity));
+		particles.push(ParticleUtil.create(blackHole2Mass, galaxy2Position, blackhole2Velocity));
 
 
 		let qt = new BarnesHutQuadTree(simulationBounds);
@@ -294,9 +305,9 @@ function main() {
 		/**
 		 * Updates a frame of the simulation.
 		 *
-		 * @param {Particle[]} currentParticles
+		 * @param {import('./structures/particle.js').Particle[]} currentParticles
 		 *
-		 * @returns {[nextParticles: Particle[], nextSimulationBounds: Rectangle]}
+		 * @returns {[nextParticles: import('./structures/particle.js').Particle[], nextSimulationBounds: Rectangle]}
 		 */
 		const update = (currentParticles) => {
 			let minSimX = Number.POSITIVE_INFINITY;
@@ -311,13 +322,13 @@ function main() {
 				qt.insert(particle);
 			}
 
-			/**@type {Particle[]} */
+			/**@type {import('./structures/particle.js').Particle[]} */
 			const updatedParticles = [];
 
 			for (const particle of currentParticles) {
-				const nextParticle = particle
-					.clone()
-					.applyForce(barnesHutGravitate(
+				const nextParticle = ParticleUtil.applyForce(
+					ParticleUtil.clone(particle),
+					barnesHutGravitate(
 						gravityConstant.get(),
 						simulationDampening.get(),
 						theta.get(),

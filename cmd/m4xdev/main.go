@@ -24,6 +24,23 @@ func main() {
 	})
 
 	app.Get("/", handlers.Home)
+	app.Get("/paint", handlers.Paint)
+
+	// admin := app.Group("/admin")
+
+	// admin.Get("/posts", handlers.Posts)
+	// admin.Get("/post", handlers.)
+	// admin.Post("/post", handlers.)
+	// admin.Get("/post/:id", handlers.)
+	// admin.Put("/post/:id", handlers.)
+	// admin.Delete("/post/:id", handlers.)
+
+	// admin.Get("/uploads", handlers.)
+	// admin.Get("/upload", handlers.)
+	// admin.Post("/upload", handlers.)
+	// admin.Get("/upload/:id", handlers.)
+	// admin.Put("/upload/:id", handlers.)
+	// admin.Delete("/upload/:id", handlers.)
 
 	app.Use(func(c *fiber.Ctx) error {
 		return handlers.Render(c, views.View404())

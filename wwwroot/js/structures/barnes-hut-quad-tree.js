@@ -1,5 +1,5 @@
 import {Rectangle} from "./rectangle.js";
-import {Vector} from "./vector.js";
+import {VectorUtil} from "./vector.js";
 
 export class BarnesHutQuadTree {
 	/** @type {Rectangle} */
@@ -11,7 +11,7 @@ export class BarnesHutQuadTree {
 	/**@type {[BarnesHutQuadTree|null, BarnesHutQuadTree|null, BarnesHutQuadTree|null, BarnesHutQuadTree|null]} */
 	#quadrants;
 
-	/** @type {Vector} */
+	/** @type {import('./vector.js').Vector} */
 	#centerOfMass;
 	/** @type {number} */
 	#totalMass;
@@ -29,7 +29,7 @@ export class BarnesHutQuadTree {
 
 		this.#particle = null;
 		this.#quadrants = [null, null, null, null];
-		this.#centerOfMass = new Vector();
+		this.#centerOfMass = VectorUtil.create();
 		this.#totalMass = 0;
 		this.#leaf = true;
 	}
