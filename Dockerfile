@@ -18,7 +18,7 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     go mod download -x
 # Build the application.
 RUN --mount=type=cache,target=/go/pkg/mod/ \
-    CGO_ENABLED=0 go build -o /bin/m4xdev ./cmd/m4xdev
+    go build -o /bin/m4xdev ./cmd/m4xdev
 
 ################################################################################
 FROM alpine:latest AS final
