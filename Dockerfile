@@ -1,22 +1,22 @@
 ################################################################################
 
 FROM golang:latest AS fetch-stage
-COPY go.mod go.sum /app
-WORKDIR /app
+COPY go.mod go.sum /src
+WORKDIR /src
 RUN go mod download
 
 ################################################################################
 
 FROM ghcr.io/a-h/templ:latest AS generate-stage
-COPY --chown=65532:65532 . /app
-WORKDIR /app
+COPY --chown=65532:65532 . /src
+WORKDIR /src
 RUN ["templ", "generate"]
 
 ################################################################################
 
 FROM golang:1.23 AS build-stage
-COPY --from=generate-stage /app /app
-WORKDIR /app
+COPY --from=generate-stage /src /src
+WORKDIR /src
 RUN CGO_ENABLED=0 go build -o /bin/m4xdev ./cmd/m4xdev
 
 ################################################################################
