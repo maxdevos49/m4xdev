@@ -1,13 +1,13 @@
 ################################################################################
 
-FROM golang:latest AS fetch-stage
+FROM golang:1.23 AS fetch-stage
 COPY go.mod go.sum /src
 WORKDIR /src
 RUN go mod download
 
 ################################################################################
 
-FROM ghcr.io/a-h/templ:latest AS generate-stage
+FROM ghcr.io/a-h/templ:v0.3.819 AS generate-stage
 COPY --chown=65532:65532 . /src
 WORKDIR /src
 RUN ["templ", "generate"]

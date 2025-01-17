@@ -46,7 +46,7 @@ func main() {
 		return handlers.Render(c, views.View404())
 	})
 
-	if err := app.Listen(":3002"); err != nil {
+	if err := app.Listen(":8000"); err != nil {
 		log.Fatal(err)
 	}
 }

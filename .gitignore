@@ -27,5 +27,6 @@ bin
 assets
 .embed
 *_templ.go
+*_templ.txt
 *.fiber.gz
 .env

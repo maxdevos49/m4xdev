@@ -1,9 +1,11 @@
 module github.com/maxdevos49/m4xdev
 
-go 1.21.5
+go 1.23
+
+toolchain go1.23.5
 
 require (
-	github.com/a-h/templ v0.2.771
+	github.com/a-h/templ v0.3.819
 	github.com/gofiber/fiber/v2 v2.52.2
 )
 
@@ -18,5 +20,5 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.52.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/sys v0.23.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
 )
