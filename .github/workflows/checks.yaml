@@ -46,7 +46,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/m4xdev:latest .
+          docker build --platform linux/arm64 -t ghcr.io/${{ github.repository_owner }}/m4xdev:latest .
 
       - name: Push Docker image
         run: |
