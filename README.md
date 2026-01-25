@@ -1,54 +1,30 @@
 # M4XDEV\.com
----
 
-Personal website written in Go. Goals for this site include low maintenance and ease of adding new content while being a joy to work on.
+Personal website with the goal of being a joy to work on with minimal maintenance.
 
-## Development dependencies
-
-### [Templ](https://github.com/a-h/templ) - HTML templating language for Go
-```sh
-go install github.com/a-h/templ/cmd/templ@latest
+## Project setup
+1. Install dependencies
+```bash
+$ pnpm install
 ```
 
-### [Node + NPM](https://nodejs.org/en) - Used for JSDoc type validation
-```sh
-# Install node dependencies
-npm ci
+2. Copy example env file
+```bash
+$ cp .env.example .env
 ```
 
-## Development Tools
+## Running the project
+```bash
+# Development
+$ pnpm dev
 
-### [Air](https://github.com/cosmtrek/air) - Live reload for Go apps
-```sh
-go install github.com/cosmtrek/air@latest
+# Production
+$ pnpm start
 ```
 
-## Build project
-```sh
-make build
+## Development notes
+1. Verifying types
+```bash
+$ pnpm types:check
 ```
 
-## JSDoc type checking
-```sh
-npm run check
-```
-
-## JS linting
-```sh
-npm run lint
-```
-
-## Run project
-```sh
-./bin/m4xdev
-```
-
-## Live rebuild and run
-```sh
-air
-```
-
-## Clean project
-```sh
-make clean
-```

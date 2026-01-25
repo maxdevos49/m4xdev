@@ -1,9 +1,0 @@
-services:
-
-  server:
-    pull_policy: build
-    build:
-      context: .
-      target: final
-    ports:
-      - 3002:3002

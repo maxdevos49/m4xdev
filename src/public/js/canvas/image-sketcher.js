@@ -139,7 +139,7 @@ const NormalDirection = {
  * Gets the direction the normal vector direction
  *
  * @param {ImageData} imageData The image data.
- * @param {ReturnType<searchIndexes>} offsets The positions around the point.
+ * @param {ReturnType<typeof searchIndexes>} offsets The positions around the point.
  *
  * @returns {number|null} The direction the normal vector points.
  */
@@ -205,7 +205,7 @@ function normalDirection(imageData, offsets) {
  * Follows a hard edge on a image.
  *
  * @param {ImageData} imageData The image data.
- * @param {ReturnType<searchIndexes>} offsets The position to follow from. This should already be on a edge.
+ * @param {ReturnType<typeof searchIndexes>} offsets The position to follow from. This should already be on a edge.
  * @param {number} normal The normal pixel to start the search at.
  *
  * @returns {number|null} Yhe next edge position.

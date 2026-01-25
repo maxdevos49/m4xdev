@@ -63,7 +63,7 @@ export class Rectangle {
 	/**
 	 * Indicates if a point is inside the rectangle.
 	 *
-	 * @param {import("./vector.js").VectorUtil} point
+	 * @param {import("./vector.js").Vector} point
 	 *
 	 * @returns {boolean}
 	 */

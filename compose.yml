@@ -1,0 +1,7 @@
+services:
+  m4xdev:
+    restart: unless-stopped
+    build: .
+    expose:
+      - '8080'
+

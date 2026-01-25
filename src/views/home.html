@@ -1,0 +1,450 @@
+<html>
+
+<head>
+	<title>M4XDEV</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="/css/utilities.css" />
+	<script src="/js/page.js" type="module" defer></script>
+</head>
+
+<body class="bg-black w-fit-content">
+	<nav>
+		<div class="bg-blue text-white p-1 bold">
+			<span id="header-date">...</span> <span class="mx-5px" id="header-time"></span>
+		</div>
+		<div class="p-1 bg-white border-bottom">
+			<a class="text-black text-decoration-none bold" href="/">M4XDEV</a>
+		</div>
+	</nav>
+	<main class="bg-white p-1">
+
+		<style>
+			canvas {
+				border: 1px solid rgb(146, 146, 146);
+			}
+		</style>
+		<div class="flex flex-col">
+			<!-- Mask Creator -->
+			<div class="flex flex-row">
+				<fieldset>
+					<style>
+						.bit-selector {
+							padding: 3px 2px 3px;
+							border: 1px solid black;
+							border-right: none;
+							text-align: right;
+
+							font-size: medium;
+							font-family: monospace;
+						}
+
+						.bit-selector input[type="text"] {
+							padding: 0;
+							margin: 0;
+						}
+					</style>
+					<legend>Mask Generator</legend>
+					<div>
+						<button id="mask-toggle-on">Toggle All Bits On</button>
+						<button id="mask-toggle-off">Toggle All Bits Off</button>
+						<button id="mask-invert">Invert All Bits</button>
+					</div>
+					<br />
+					<div class="flex flex-row">
+						<label class="bit-selector">
+							<p>63</p>
+							<input type="checkbox" id="mask-bit-63" />
+						</label>
+						<label class="bit-selector">
+							<p>62</p>
+							<input type="checkbox" id="mask-bit-62" />
+						</label>
+						<label class="bit-selector">
+							<p>61</p>
+							<input type="checkbox" id="mask-bit-61" />
+						</label>
+						<label class="bit-selector">
+							<p>60</p>
+							<input type="checkbox" id="mask-bit-60" />
+						</label>
+						<label class="bit-selector">
+							<p>59</p>
+							<input type="checkbox" id="mask-bit-59" />
+						</label>
+						<label class="bit-selector">
+							<p>58</p>
+							<input type="checkbox" id="mask-bit-58" />
+						</label>
+						<label class="bit-selector">
+							<p>57</p>
+							<input type="checkbox" id="mask-bit-57" />
+						</label>
+						<label class="bit-selector">
+							<p>56</p>
+							<input type="checkbox" id="mask-bit-56" />
+						</label>
+						<label class="bit-selector">
+							<p>55</p>
+							<input type="checkbox" id="mask-bit-55" />
+						</label>
+						<label class="bit-selector">
+							<p>54</p>
+							<input type="checkbox" id="mask-bit-54" />
+						</label>
+						<label class="bit-selector">
+							<p>53</p>
+							<input type="checkbox" id="mask-bit-53" />
+						</label>
+						<label class="bit-selector">
+							<p>52</p>
+							<input type="checkbox" id="mask-bit-52" />
+						</label>
+						<label class="bit-selector">
+							<p>51</p>
+							<input type="checkbox" id="mask-bit-51" />
+						</label>
+						<label class="bit-selector">
+							<p>50</p>
+							<input type="checkbox" id="mask-bit-50" />
+						</label>
+						<label class="bit-selector">
+							<p>49</p>
+							<input type="checkbox" id="mask-bit-49" />
+						</label>
+						<label class="bit-selector">
+							<p>48</p>
+							<input type="checkbox" id="mask-bit-48" />
+						</label>
+						<label class="bit-selector">
+							<p>47</p>
+							<input type="checkbox" id="mask-bit-47" />
+						</label>
+						<label class="bit-selector">
+							<p>46</p>
+							<input type="checkbox" id="mask-bit-46" />
+						</label>
+						<label class="bit-selector">
+							<p>45</p>
+							<input type="checkbox" id="mask-bit-45" />
+						</label>
+						<label class="bit-selector">
+							<p>44</p>
+							<input type="checkbox" id="mask-bit-44" />
+						</label>
+						<label class="bit-selector">
+							<p>43</p>
+							<input type="checkbox" id="mask-bit-43" />
+						</label>
+						<label class="bit-selector">
+							<p>42</p>
+							<input type="checkbox" id="mask-bit-42" />
+						</label>
+						<label class="bit-selector">
+							<p>41</p>
+							<input type="checkbox" id="mask-bit-41" />
+						</label>
+						<label class="bit-selector">
+							<p>40</p>
+							<input type="checkbox" id="mask-bit-40" />
+						</label>
+						<label class="bit-selector">
+							<p>39</p>
+							<input type="checkbox" id="mask-bit-39" />
+						</label>
+						<label class="bit-selector">
+							<p>38</p>
+							<input type="checkbox" id="mask-bit-38" />
+						</label>
+						<label class="bit-selector">
+							<p>37</p>
+							<input type="checkbox" id="mask-bit-37" />
+						</label>
+						<label class="bit-selector">
+							<p>36</p>
+							<input type="checkbox" id="mask-bit-36" />
+						</label>
+						<label class="bit-selector">
+							<p>35</p>
+							<input type="checkbox" id="mask-bit-35" />
+						</label>
+						<label class="bit-selector">
+							<p>34</p>
+							<input type="checkbox" id="mask-bit-34" />
+						</label>
+						<label class="bit-selector">
+							<p>33</p>
+							<input type="checkbox" id="mask-bit-33" />
+						</label>
+						<label class="bit-selector">
+							<p>32</p>
+							<input type="checkbox" id="mask-bit-32" />
+						</label>
+						<label class="bit-selector">
+							<p>31</p>
+							<input type="checkbox" id="mask-bit-31" />
+						</label>
+						<label class="bit-selector">
+							<p>30</p>
+							<input type="checkbox" id="mask-bit-30" />
+						</label>
+						<label class="bit-selector">
+							<p>29</p>
+							<input type="checkbox" id="mask-bit-29" />
+						</label>
+						<label class="bit-selector">
+							<p>28</p>
+							<input type="checkbox" id="mask-bit-28" />
+						</label>
+						<label class="bit-selector">
+							<p>27</p>
+							<input type="checkbox" id="mask-bit-27" />
+						</label>
+						<label class="bit-selector">
+							<p>26</p>
+							<input type="checkbox" id="mask-bit-26" />
+						</label>
+						<label class="bit-selector">
+							<p>25</p>
+							<input type="checkbox" id="mask-bit-25" />
+						</label>
+						<label class="bit-selector">
+							<p>24</p>
+							<input type="checkbox" id="mask-bit-24" />
+						</label>
+						<label class="bit-selector">
+							<p>23</p>
+							<input type="checkbox" id="mask-bit-23" />
+						</label>
+						<label class="bit-selector">
+							<p>22</p>
+							<input type="checkbox" id="mask-bit-22" />
+						</label>
+						<label class="bit-selector">
+							<p>21</p>
+							<input type="checkbox" id="mask-bit-21" />
+						</label>
+						<label class="bit-selector">
+							<p>20</p>
+							<input type="checkbox" id="mask-bit-20" />
+						</label>
+						<label class="bit-selector">
+							<p>19</p>
+							<input type="checkbox" id="mask-bit-19" />
+						</label>
+						<label class="bit-selector">
+							<p>18</p>
+							<input type="checkbox" id="mask-bit-18" />
+						</label>
+						<label class="bit-selector">
+							<p>17</p>
+							<input type="checkbox" id="mask-bit-17" />
+						</label>
+						<label class="bit-selector">
+							<p>16</p>
+							<input type="checkbox" id="mask-bit-16" />
+						</label>
+						<label class="bit-selector">
+							<p>15</p>
+							<input type="checkbox" id="mask-bit-15" />
+						</label>
+						<label class="bit-selector">
+							<p>14</p>
+							<input type="checkbox" id="mask-bit-14" />
+						</label>
+						<label class="bit-selector">
+							<p>13</p>
+							<input type="checkbox" id="mask-bit-13" />
+						</label>
+						<label class="bit-selector">
+							<p>12</p>
+							<input type="checkbox" id="mask-bit-12" />
+						</label>
+						<label class="bit-selector">
+							<p>11</p>
+							<input type="checkbox" id="mask-bit-11" />
+						</label>
+						<label class="bit-selector">
+							<p>10</p>
+							<input type="checkbox" id="mask-bit-10" />
+						</label>
+						<label class="bit-selector">
+							<p>9</p>
+							<input type="checkbox" id="mask-bit-9" />
+						</label>
+						<label class="bit-selector">
+							<p>8</p>
+							<input type="checkbox" id="mask-bit-8" />
+						</label>
+						<label class="bit-selector">
+							<p>7</p>
+							<input type="checkbox" id="mask-bit-7" />
+						</label>
+						<label class="bit-selector">
+							<p>6</p>
+							<input type="checkbox" id="mask-bit-6" />
+						</label>
+						<label class="bit-selector">
+							<p>5</p>
+							<input type="checkbox" id="mask-bit-5" />
+						</label>
+						<label class="bit-selector">
+							<p>4</p>
+							<input type="checkbox" id="mask-bit-4" />
+						</label>
+						<label class="bit-selector">
+							<p>3</p>
+							<input type="checkbox" id="mask-bit-3" />
+						</label>
+						<label class="bit-selector">
+							<p>2</p>
+							<input type="checkbox" id="mask-bit-2" />
+						</label>
+						<label class="bit-selector">
+							<p>1</p>
+							<input type="checkbox" id="mask-bit-1" />
+						</label>
+						<label class="bit-selector" style="border-right: 1px solid black">
+							<p>0</p>
+							<input type="checkbox" id="mask-bit-0" />
+						</label>
+					</div>
+					<div class="flex flex-col">
+						<br />
+						<label style="width: 850px;">
+							Binary:
+							<input type="string" id="mask-bin" style="width: 700px; float: right; font-family: monospace;" value="0b0000000000000000000000000000000000000000000000000000000000000000" readonly />
+						</label>
+						<br />
+						<label style="width: 850px;">
+							Hexidecimal:
+							<input type="string" id="mask-hex" style="width: 700px; float: right; font-family: monospace;" value="0x0000000000000000" readonly />
+						</label>
+						<br />
+					</div>
+					<br />
+				</fieldset>
+			</div>
+			<!-- Nbody Simulation -->
+			<div class="flex flex-row">
+				<canvas id="nbody-canvas" width="500" height="500">Dude update your browser.</canvas>
+				<fieldset>
+					<legend>N-body Simulation</legend>
+					<div>
+						<label>Particles</label>
+						<input id="nbody-particle-count" type="number" value="1000" />
+					</div>
+					<div>
+						<label>Simulation Scale</label>
+						<input id="nbody-simulation-scale" type="number" value="10" step="10" min="1" />
+					</div>
+					<div>
+						<label>Dampening</label>
+						<input id="nbody-simulation-dampening" type="number" value="100" step="1" min="1" />
+					</div>
+					<div>
+						<label>Gravity Constant</label>
+						<input id="nbody-gravity" type="number" value="0.001" step="0.001" min="0" />
+					</div>
+					<div>
+						<label>Blackhole mass</label>
+						<input id="nbody-blackhole-mass" type="number" value="20000000" step="100000" min="0" />
+					</div>
+					<div>
+						<label>Star mass range</label>
+						<input id="nbody-star-mass" type="number" value="1000" step="10" min="0" />
+					</div>
+					<div>
+						<label>Theta</label>
+						<input id="nbody-theta" type="number" value="0.8" step="0.1" min="0" />
+					</div>
+				</fieldset>
+			</div>
+			<!-- Element data binding -->
+			<div class="flex flex-row">
+				<fieldset>
+					<legend>Data Binding</legend>
+					<div>
+						<input id="bind-text" type="text" value="Hello, World!" />
+						<dl>
+							<dt>Value</dt>
+							<dd id="bound-text-value"></dd>
+							<dt>Length</dt>
+							<dd id="bound-text-value-length"></dd>
+						</dl>
+					</div>
+					<div>
+						<label>Range</label>
+						<input id="bind-range" type="range" min="0" max="255" />
+						<dl>
+							<dt>Value</dt>
+							<dd id="bound-range-value"></dd>
+						</dl>
+					</div>
+					<div>
+						<label>Select</label>
+						<select id="bind-select">
+							<option value="1">Option 1</option>
+							<option value="2">Option 2</option>
+							<option value="3">Option 3</option>
+						</select>
+						<dl>
+							<dt>Value</dt>
+							<dd id="bound-select-value"></dd>
+						</dl>
+					</div>
+				</fieldset>
+			</div>
+			<!-- Image tracer -->
+			<div class="flex flex-row">
+				<canvas id="sketcher-canvas" width="500" height="500">Dude update your browser.</canvas>
+				<fieldset class="flex flex-col ml-1">
+					<legend>Image Sketcher</legend>
+					<form id="sketcher-form">
+						<div class="p-1 flex flex-col">
+							<label>Custom Image</label>
+							<input id="sketcher-image" type="file" name="sketcher-image" accept="image/png, image/jpeg" class="mt-1" required />
+						</div>
+						<div class="p-1">
+							<button type="submit">Draw!</button>
+						</div>
+					</form>
+					<hr />
+					<div class="p-1 flex flex-col">
+						<label class="bold">
+							Stats
+						</label>
+						<dl>
+							<dt>Total Lines</dt>
+							<dd id="sketcher-lines">0</dd>
+							<dt>Total Points</dt>
+							<dd id="sketcher-points">0</dd>
+							<dt>Progress</dt>
+							<dd id="sketcher-progress">0%</dd>
+						</dl>
+						<label>
+							Data
+						</label>
+						<textarea id="sketcher-data" rows="8" class="mt-1" readonly></textarea>
+					</div>
+				</fieldset>
+			</div>
+			<!-- Sand simulation -->
+			<div id="app"></div>
+		</div>
+		<script src="/js/sand.js" type="module" defer></script>
+		<script src="/js/image-tracer.js" type="module" defer></script>
+		<script src="/js/data-binding.js" type="module" defer></script>
+		<script src="/js/n-body.js" type="module" defer></script>
+		<script src="/js/mask.js" type="module" defer></script>
+
+	</main>
+	<footer class="bg-black text-white text-center p-1">
+		<a class="text-white" href="/">Home</a>
+	</footer>
+</body>
+
+</html>

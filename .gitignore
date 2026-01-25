@@ -30,3 +30,4 @@ assets
 *_templ.txt
 *.fiber.gz
 .env
+notes.txt

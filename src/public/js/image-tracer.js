@@ -6,7 +6,7 @@ import {LoadImage, LoadImageFromBlob} from "./content/image.js";
 /**
  * Sketches an array of lines.
  *
- * @param {ReturnType<Sketcher>} pen
+ * @param {ReturnType<typeof Sketcher>} pen
  * @param {number} xOffset
  * @param {number} yOffset
  * @param {number} width

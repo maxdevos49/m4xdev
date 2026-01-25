@@ -6,10 +6,10 @@ import {createSignal} from "./signal.js";
  * @template T
  *
  * @param {T} initialValue The initial value of the computed signal.
- * @param {Array<import('./signal').Signal<any>>} dependencies Signals this computed signal depends on.
+ * @param {Array<import('./signal.js').Signal<any>>} dependencies Signals this computed signal depends on.
  * @param {() => T} computer The callback to compute the new value of the signal when the
  *
- * @returns {import('./signal').Signal<T>}
+ * @returns {import('./signal.js').Signal<T>}
  */
 export function createComputed(initialValue, dependencies, computer) {
 	const signal = createSignal(initialValue);
