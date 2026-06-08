@@ -1,29 +1,37 @@
-import {createSignal} from "../signal.js";
+import { createSignal } from "../signal.js";
 
 /**
- * Binds a signal to a input element.
- *
- * @param {HTMLInputElement|string} elementOrSelector
- *
- * @returns {import('../signal.js').Signal<string>}
+ * @template T
+ * @typedef {import('../signal.js').Signal<T>} Signal
  */
-export function bindInput(elementOrSelector) {
-	/** @type {HTMLElement|null} */
-	const el = typeof elementOrSelector === "string" ? document.querySelector(elementOrSelector) : elementOrSelector;
-	if (el === null && typeof elementOrSelector === "string") {
-		throw new Error(`Cannot find element with selector "${elementOrSelector}"`);
-	} else if (!(el instanceof HTMLInputElement)) {
-		throw new TypeError("Expected an instance of HTMLInputElement");
+
+/**
+ * @template T
+ * @typedef {(value: string) => T} Parser
+ */
+
+/**
+ * @template [T=string]
+ * @param {Element} element
+ * @param {Parser<T>} [parser]
+ * @returns {Signal<T>}
+ */
+function createInputSignal(element, parser) {
+	if (!(element instanceof HTMLInputElement)) {
+		throw new TypeError("Expected an instance of HTMLInputElement.");
 	}
 
-	const signal = createSignal(el.value);
+	const getValue = () =>
+		/** @type {T} */ (parser ? parser(element.value) : element.value);
 
-	el.addEventListener("input", () => {
-		signal.set(el.value);
+	const signal = createSignal(getValue());
+
+	element.addEventListener("input", () => {
+		signal.set(getValue());
 	});
 
 	signal.subscribe((value) => {
-		el.value = value;
+		element.value = String(value);
 	});
 
 	return signal;
@@ -32,28 +40,67 @@ export function bindInput(elementOrSelector) {
 /**
  * Binds a signal to a input element.
  *
- * @param {HTMLInputElement|string} elementOrSelector
+ * @template [T=string]
  *
- * @returns {import('../signal.js').Signal<number>}
+ * @overload
+ * @param {string} selector
+ * @param {Parser<T>} [parser]
+ * @returns {Signal<T>}
+ *
+ * //**
+ *
+ * @overload
+ * @param {HTMLInputElement} element
+ * @param {Parser<T>} [parser]
+ * @returns {Signal<T>}
+ *
+ * //**
+ *
+ * @overload
+ * @param {HTMLElement|DocumentFragment|Document} scope
+ * @param {string} selector
+ * @param {Parser<T>} [parser]
+ * @returns {Signal<T>}
+ *
+ * //**
+ *
+ * @param {string|HTMLElement|DocumentFragment|Document} selectorOrElementOrScope
+ * @param {string|Parser<T>} [scopedSelectorOrParser]
+ * @param {Parser<T>} [parser]
  */
-export function bindNumberInput(elementOrSelector) {
-	/** @type {HTMLElement|null} */
-	const el = typeof elementOrSelector === "string" ? document.querySelector(elementOrSelector) : elementOrSelector;
-	if (el === null && typeof elementOrSelector === "string") {
-		throw new Error(`Cannot find element with selector "${elementOrSelector}"`);
-	} else if (!(el instanceof HTMLInputElement) || el.type !== "number") {
-		throw new TypeError("Expected an instance of HTMLInputElement with type \"number\"");
+function bindInput(selectorOrElementOrScope, scopedSelectorOrParser, parser) {
+	if (typeof selectorOrElementOrScope === "string") {
+		const selector = selectorOrElementOrScope;
+		const resolvedParser = /** @type {Parser<T>|undefined}*/ (
+			scopedSelectorOrParser
+		);
+
+		const element = document.querySelector(selector);
+		if (element === null) {
+			throw new Error(`Cannot find element with selector "${selector}"`);
+		}
+
+		return createInputSignal(element, resolvedParser);
 	}
 
-	const signal = createSignal(Number(el.value));
+	if (selectorOrElementOrScope instanceof HTMLInputElement) {
+		const element = selectorOrElementOrScope;
+		const resolvedParser = /** @type {Parser<T>|undefined}*/ (
+			scopedSelectorOrParser
+		);
 
-	el.addEventListener("input", () => {
-		signal.set(Number(el.value));
-	});
+		return createInputSignal(element, resolvedParser);
+	}
 
-	signal.subscribe((value) => {
-		el.value = String(value);
-	});
+	const scope = selectorOrElementOrScope;
+	const selector = /** @type {string} */ (scopedSelectorOrParser);
 
-	return signal;
+	const element = scope.querySelector(selector);
+	if (element === null) {
+		throw new Error(`Cannot find element with selector "${selector}"`);
+	}
+
+	return createInputSignal(element, parser);
 }
+
+export { bindInput };

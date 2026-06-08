@@ -10,7 +10,7 @@
  * @link https://people.eecs.berkeley.edu/~demmel/cs267/lecture26/lecture26.html
  */
 
-import {bindNumberInput} from "./state/bind/input.js";
+import {bindInput} from "./state/bind/input.js";
 import {createEffect} from "./state/effect.js";
 import {BarnesHutQuadTree} from "./structures/barnes-hut-quad-tree.js";
 import {ParticleUtil} from "./structures/particle.js";
@@ -148,13 +148,13 @@ function main() {
 
 	const renderBounds = new Rectangle(0, 0, canvas.width, canvas.height);
 
-	const particleCount = bindNumberInput("#nbody-particle-count");
-	const gravityConstant = bindNumberInput("#nbody-gravity");
-	const blackholeMass = bindNumberInput("#nbody-blackhole-mass");
-	const starMass = bindNumberInput("#nbody-star-mass");
-	const simulationScale = bindNumberInput("#nbody-simulation-scale");
-	const simulationDampening = bindNumberInput("#nbody-simulation-dampening");
-	const theta = bindNumberInput("#nbody-theta");
+	const particleCount = bindInput("#nbody-particle-count", Number);
+	const gravityConstant = bindInput("#nbody-gravity", Number);
+	const blackholeMass = bindInput("#nbody-blackhole-mass", Number);
+	const starMass = bindInput("#nbody-star-mass", Number);
+	const simulationScale = bindInput("#nbody-simulation-scale", Number);
+	const simulationDampening = bindInput("#nbody-simulation-dampening", Number);
+	const theta = bindInput("#nbody-theta", Number);
 
 	const SCROLL_SENSITIVITY = 0.0005;
 	const MAX_ZOOM = 5;

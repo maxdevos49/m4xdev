@@ -11,12 +11,12 @@
 		"start": "node --title=m4xdev --env-file=.env --permission --allow-fs-read=. src/main.js"
 	},
 	"devDependencies": {
-		"@types/express": "^5.0.6",
-		"@typescript/native-preview": "7.0.0-dev.20260122.2"
+		"@types/express": "5.0.6",
+		"@typescript/native-preview": "7.0.0-dev.20260606.1"
 	},
 	"dependencies": {
-		"express": "^5.2.1",
-		"helmet": "^8.1.0",
-		"zod": "^4.3.6"
+		"express": "5.2.1",
+		"helmet": "8.2.0",
+		"zod": "4.4.3"
 	}
 }
