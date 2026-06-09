@@ -1,0 +1,636 @@
+<html lang="en-US">
+
+<head>
+	<title>Librarian Trade Planner - M4XDEV</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="/css/utilities.css" />
+	<script src="/js/page.js" type="module" defer></script>
+</head>
+
+<body class="bg-black w-fit-content">
+	<nav>
+		<div class="bg-blue text-white p-1 bold">
+			<span id="header-date">...</span> <span class="mx-5px" id="header-time"></span>
+		</div>
+		<div class="p-1 bg-white border-bottom">
+			<a class="text-black text-decoration-none bold" href="/">M4XDEV</a>
+		</div>
+	</nav>
+	<main class="bg-white p-1">
+		<!-- Librarian Trades -->
+		<div id="librarian-trades" class="flex flex-row">
+			<style>
+				#librarian-trades {
+					table {
+						width: 100%;
+						border-collapse: collapse;
+					}
+
+					td,
+					th {
+						border-bottom: 0.5px solid black;
+						padding: 8px 16px;
+					}
+
+					td {
+						text-align: right;
+					}
+
+					td[colspan="6"] {
+						background-color: rgba(54, 54, 54, 0.079);
+					}
+
+					td[colspan="6"],
+					th {
+						font-size: 11px;
+						text-align: left;
+						font-weight: 500;
+						text-transform: uppercase;
+					}
+
+					[data-cost-bar] {
+						padding: 0;
+					}
+
+					[data-cost-bar] div {
+						position: relative;
+						height: 8px;
+						width: 100px;
+						border-radius: 4px;
+						background: linear-gradient(to right,
+								#4ade80 0%,
+								#4ade80 var(--green-end, 33%),
+								#facc15 var(--green-end, 33%),
+								#facc15 var(--yellow-end, 66%),
+								#f87171 var(--yellow-end, 66%),
+								#f87171 100%);
+					}
+
+					[data-cost-bar] div::after {
+						content: '';
+						position: absolute;
+						top: 50%;
+						left: var(--cost-pct, 50000%);
+						transform: translate(-50%, -50%);
+						width: 12px;
+						height: 12px;
+						border-radius: 50%;
+						background: transparent;
+						border: 2px solid #374151;
+					}
+				}
+			</style>
+
+			<fieldset>
+				<legend>Librarian Hall Planner</legend>
+
+				<table>
+					<thead>
+						<tr>
+							<th>Enchantment</th>
+							<th>Price</th>
+							<th colspan="3">Range</th>
+							<th>Cured</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="6">Universal</td>
+						</tr>
+
+						<tr data-enchantment="mending_i:1">
+							<td>Mending I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="10" max="38" step="1"></td>
+							<td data-min-cost>10</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>38</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="mending_i:2">
+							<td>Mending I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="10" max="38" step="1"></td>
+							<td data-min-cost>10</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>38</td>
+							<td data-current-cured-cost>-</td>
+
+						</tr>
+
+						<tr data-enchantment="unbreaking_iii:1">
+							<td>Unbreaking III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="unbreaking_iii:2">
+							<td>Unbreaking III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="curse_of_vanishing_i">
+							<td>Curse of Vanishing I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="10" max="38" step="1"></td>
+							<td data-min-cost>10</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>38</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Tools</td>
+						</tr>
+
+						<tr data-enchantment="efficiency_v">
+							<td>Efficiency V</td>
+							<td data-current-uncured-cost><input type="number" value="" min="17" max="64" step="1"></td>
+							<td data-min-cost>17</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>64</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="silk_touch_i">
+							<td>Silk Touch I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="5" max="19" step="1"></td>
+							<td data-min-cost>5</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>19</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="fortune_iii">
+							<td>Fortune III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Fishing Rod</td>
+						</tr>
+
+						<tr data-enchantment="luck_of_the_sea_iii">
+							<td>Luck of the Sea III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="lure_iii">
+							<td>Lure III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Sword</td>
+						</tr>
+
+						<tr data-enchantment="sharpness_v">
+							<td>Sharpness V</td>
+							<td data-current-uncured-cost><input type="number" value="" min="17" max="64" step="1"></td>
+							<td data-min-cost>17</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>64</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="smite_v">
+							<td>Smite V</td>
+							<td data-current-uncured-cost><input type="number" value="" min="17" max="64" step="1"></td>
+							<td data-min-cost>17</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>64</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="bane_of_arthropods_v">
+							<td>Bane of Arthropods V</td>
+							<td data-current-uncured-cost><input type="number" value="" min="17" max="64" step="1"></td>
+							<td data-min-cost>17</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>64</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="looting_iii">
+							<td>Looting III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="fire_aspect_ii">
+							<td>Fire Aspect II</td>
+							<td data-current-uncured-cost><input type="number" value="" min="8" max="32" step="1"></td>
+							<td data-min-cost>8</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>32</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="sweeping_edge_iii">
+							<td>Sweeping Edge III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="knockback_ii">
+							<td>Knockback II</td>
+							<td data-current-uncured-cost><input type="number" value="" min="8" max="32" step="1"></td>
+							<td data-min-cost>8</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>32</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="knockback_i">
+							<td>Knockback I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="5" max="19" step="1"></td>
+							<td data-min-cost>5</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>19</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Spear</td>
+						</tr>
+
+						<tr data-enchantment="lunge_iii">
+							<td>Lunge III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Mace</td>
+						</tr>
+
+						<tr data-enchantment="breach_iv">
+							<td>Breach IV</td>
+							<td data-current-uncured-cost><input type="number" value="" min="14" max="58" step="1"></td>
+							<td data-min-cost>14</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>58</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="density_v">
+							<td>Density V</td>
+							<td data-current-uncured-cost><input type="number" value="" min="17" max="64" step="1"></td>
+							<td data-min-cost>17</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>64</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Trident</td>
+						</tr>
+
+						<tr data-enchantment="impaling_v">
+							<td>Impaling V</td>
+							<td data-current-uncured-cost><input type="number" value="" min="17" max="64" step="1"></td>
+							<td data-min-cost>17</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>64</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="loyalty_iii">
+							<td>Loyalty III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="riptide_iii">
+							<td>Riptide III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="channeling_i">
+							<td>Channeling I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="5" max="19" step="1"></td>
+							<td data-min-cost>5</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>19</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Bow</td>
+						</tr>
+
+						<tr data-enchantment="power_v">
+							<td>Power V</td>
+							<td data-current-uncured-cost><input type="number" value="" min="17" max="64" step="1"></td>
+							<td data-min-cost>17</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>64</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="flame_i">
+							<td>Flame I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="5" max="19" step="1"></td>
+							<td data-min-cost>5</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>19</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="punch_ii">
+							<td>Punch II</td>
+							<td data-current-uncured-cost><input type="number" value="" min="8" max="32" step="1"></td>
+							<td data-min-cost>8</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>32</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="infinity_i">
+							<td>Infinity I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="5" max="19" step="1"></td>
+							<td data-min-cost>5</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>19</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Crossbow</td>
+						</tr>
+
+						<tr data-enchantment="multishot_i">
+							<td>Multishot I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="5" max="19" step="1"></td>
+							<td data-min-cost>5</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>19</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="piercing_iv">
+							<td>Piercing IV</td>
+							<td data-current-uncured-cost><input type="number" value="" min="14" max="58" step="1"></td>
+							<td data-min-cost>14</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>58</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="quick_charge_iii">
+							<td>Quick Charge III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Armour - Universal</td>
+						</tr>
+
+						<tr data-enchantment="curse_of_binding_i">
+							<td>Curse of Binding I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="5" max="19" step="1"></td>
+							<td data-min-cost>5</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>19</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="protection_iv">
+							<td>Protection IV</td>
+							<td data-current-uncured-cost><input type="number" value="" min="14" max="58" step="1"></td>
+							<td data-min-cost>14</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>58</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="blast_protection_iv">
+							<td>Blast Protection IV</td>
+							<td data-current-uncured-cost><input type="number" value="" min="14" max="58" step="1"></td>
+							<td data-min-cost>14</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>58</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="projectile_protection_iv">
+							<td>Projectile Protection IV</td>
+							<td data-current-uncured-cost><input type="number" value="" min="14" max="58" step="1"></td>
+							<td data-min-cost>14</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>58</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="fire_protection_iv">
+							<td>Fire Protection IV</td>
+							<td data-current-uncured-cost><input type="number" value="" min="14" max="58" step="1"></td>
+							<td data-min-cost>14</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>58</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="thorns_iii">
+							<td>Thorns III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Helmet</td>
+						</tr>
+
+						<tr data-enchantment="aqua_affinity_i">
+							<td>Aqua Affinity I</td>
+							<td data-current-uncured-cost><input type="number" value="" min="5" max="19" step="1"></td>
+							<td data-min-cost>5</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>19</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="respiration_iii">
+							<td>Respiration III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr>
+							<td colspan="6">Boots</td>
+						</tr>
+
+						<tr data-enchantment="feather_falling_iv">
+							<td>Feather Falling IV</td>
+							<td data-current-uncured-cost><input type="number" value="" min="14" max="58" step="1"></td>
+							<td data-min-cost>14</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>58</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="depth_strider_iii">
+							<td>Depth Strider III</td>
+							<td data-current-uncured-cost><input type="number" value="" min="11" max="45" step="1"></td>
+							<td data-min-cost>11</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>45</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+
+						<tr data-enchantment="frost_walker_ii">
+							<td>Frost Walker II</td>
+							<td data-current-uncured-cost><input type="number" value="" min="16" max="64" step="1"></td>
+							<td data-min-cost>16</td>
+							<td data-cost-bar>
+								<div></div>
+							</td>
+							<td data-max-cost>64</td>
+							<td data-current-cured-cost>-</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="flex flex-col mt-1">
+					<label class="bold">Data</label>
+					<textarea id="data"></textarea>
+					<p class="muted">Copy JSON to share progress with others. Paste JSON to sync progress from others.</p>
+				</div>
+
+			</fieldset>
+		</div>
+	</main>
+	<script src="/js/librarian-planner.js" type="module" defer></script>
+</body>
+
+</html>

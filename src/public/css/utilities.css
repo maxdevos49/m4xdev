@@ -34,6 +34,10 @@
 	font-weight: 600;
 }
 
+.muted {
+  font-size: 0.875rem;
+}
+
 /* Border utilities */
 
 .border-bottom {

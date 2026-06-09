@@ -48,6 +48,10 @@ function main(env) {
 		res.status(200).sendFile(path.join(dir, "views", "home.html"));
 	});
 
+	app.get("/librarian-planner", (_, res) => {
+		res.status(200).sendFile(path.join(dir, "views", "librarian-planner.html"));
+	});
+
 	app.get("/health", (_, res) => {
 		res.status(200).send("ok");
 	});
